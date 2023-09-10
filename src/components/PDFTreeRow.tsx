@@ -29,11 +29,28 @@ function PDFTreeLine(props: {
   iconColor: string;
   name?: string;
   value?: React.ReactNode;
+  expanded: boolean;
+  node: TreeNode;
 }) {
+  const getExpandIcon = () => {
+    if (props.node.children.length === 0) {
+      return <div className="min-w-[16px] min-h-[16px]"></div>;
+    }
+    return props.expanded ? (
+      <MdExpandMore className="min-w-[16px] min-h-[16px]" />
+    ) : (
+      <MdChevronRight className="min-w-[16px] min-h-[16px]" />
+    );
+  };
   return (
     <>
-      <props.icon className={`${props.iconColor}`} />
-      {props.name && <span>{props.name}:</span>}
+      <div className="flex items-center gap-1 min-h-[24px]">
+        {getExpandIcon()}
+        <props.icon
+          className={`${props.iconColor} min-w-[16px] min-h-[16px]`}
+        />
+        {props.name && <span>{props.name}:</span>}
+      </div>
       {props.value && <span className="text-gray-500">{props.value}</span>}
     </>
   );
@@ -47,23 +64,17 @@ export function PDFTreeRow(props: { node: TreeNode }) {
     setExpanded(!expanded);
   };
 
-  const getExpandIcon = () => {
-    if (node.children.length === 0) {
-      return <div className="w-[16px]"></div>;
-    }
-    return expanded ? <MdExpandMore /> : <MdChevronRight />;
-  };
-
   const getLine = () => {
     // const isParentArray = node.parent && isArray(node.parent.obj);
     const obj = node.obj;
-    console.log(obj);
     if (isDict(obj)) {
       return (
         <PDFTreeLine
           icon={PiBracketsCurlyBold}
           iconColor="text-green-600"
           name={node.name}
+          expanded={expanded}
+          node={node}
         />
       );
     } else if (isArray(obj)) {
@@ -72,6 +83,8 @@ export function PDFTreeRow(props: { node: TreeNode }) {
           icon={PiBracketsSquareBold}
           iconColor="text-purple-600"
           name={node.name}
+          expanded={expanded}
+          node={node}
         />
       );
     } else if (isRef(obj)) {
@@ -81,6 +94,8 @@ export function PDFTreeRow(props: { node: TreeNode }) {
           iconColor="text-magenta-600"
           name={node.name}
           value={`ref(num=${obj.num}, gen=${obj.gen})`}
+          expanded={expanded}
+          node={node}
         />
       );
     } else if (isStream(obj)) {
@@ -89,6 +104,8 @@ export function PDFTreeRow(props: { node: TreeNode }) {
           icon={VscFileBinary}
           iconColor="text-fuchsia-600"
           name={node.name}
+          expanded={expanded}
+          node={node}
         />
       );
     } else if (isStreamContent(obj)) {
@@ -98,6 +115,8 @@ export function PDFTreeRow(props: { node: TreeNode }) {
           iconColor="text-gray-500"
           name={node.name}
           value={`[...stream contents...]`}
+          expanded={expanded}
+          node={node}
         />
       );
     } else if (isName(obj)) {
@@ -107,6 +126,8 @@ export function PDFTreeRow(props: { node: TreeNode }) {
           iconColor="text-yellow-600"
           name={node.name}
           value={`/${obj.name}`}
+          expanded={expanded}
+          node={node}
         />
       );
     } else if (isNumber(obj)) {
@@ -116,6 +137,8 @@ export function PDFTreeRow(props: { node: TreeNode }) {
           iconColor="text-blue-600"
           name={node.name}
           value={obj.toString()}
+          expanded={expanded}
+          node={node}
         />
       );
     } else if (isString(obj)) {
@@ -125,6 +148,8 @@ export function PDFTreeRow(props: { node: TreeNode }) {
           iconColor="text-red-600"
           name={node.name}
           value={obj}
+          expanded={expanded}
+          node={node}
         />
       );
     } else if (isBoolean(obj)) {
@@ -134,6 +159,8 @@ export function PDFTreeRow(props: { node: TreeNode }) {
           iconColor="text-green-600"
           name={node.name}
           value={obj.toString()}
+          expanded={expanded}
+          node={node}
         />
       );
     } else {
@@ -143,6 +170,8 @@ export function PDFTreeRow(props: { node: TreeNode }) {
           iconColor="text-gray-500"
           name={node.name}
           value={`[unknown]`}
+          expanded={expanded}
+          node={node}
         />
       );
     }
@@ -152,9 +181,8 @@ export function PDFTreeRow(props: { node: TreeNode }) {
     <div>
       <div
         onClick={toggleExpanded}
-        className="cursor-pointer hover:bg-gray-200 px-2 rounded select-none flex items-center gap-1 h-6"
+        className="cursor-pointer hover:bg-gray-200 px-2 rounded select-none flex gap-1 min-h-6 flex-row items-start"
       >
-        {getExpandIcon()}
         {getLine()}
       </div>
       {expanded && (

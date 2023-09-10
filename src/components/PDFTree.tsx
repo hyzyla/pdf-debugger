@@ -2,14 +2,14 @@ import { PDFTreeRow } from "@/components/PDFTreeRow";
 import { PDFWalker } from "@/lib/pdf-walker";
 import * as core from "@hyzyla/pdfjs-core";
 
-export function PDFTree(props: { pdf: core.PDFDocument }) {
+export function PDFTree(props: { pdf: core.PDFDocument; name: string | null }) {
   const walker = new PDFWalker({
     pdf: props.pdf,
     maxDepth: 100,
   });
-  walker.start();
+  const root = walker.start();
 
-  console.log(walker.root);
+  console.log(root);
 
-  return <PDFTreeRow node={walker.root} />;
+  return <PDFTreeRow node={root} />;
 }

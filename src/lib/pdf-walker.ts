@@ -94,6 +94,8 @@ export class TreeNode {
       return this._children;
     }
 
+    console.log("Getting children of:", this.name, this.depth, this.obj);
+
     const depth = this.depth + 1;
     const { obj } = this;
     const children: TreeNode[] = [];
@@ -184,7 +186,6 @@ export class PDFWalker {
   maxDepth: number;
 
   xref: any;
-  root: TreeNode;
 
   refSet: Set<any> = new Set();
 
@@ -192,16 +193,10 @@ export class PDFWalker {
     this.pdf = options.pdf;
     this.xref = this.pdf.xref;
     this.maxDepth = options.maxDepth;
-
-    // Start traversal from the root node, which is the Trailer in the cross-reference table.
-    this.root = new TreeNode({
-      obj: this.xref.trailer,
-      name: "Trailer Dictionary",
-      depth: 0,
-    });
   }
 
   private walk(node: TreeNode) {
+    console.log("Walking node:", node.name, node.depth);
     // If the node is a reference, resolve it.
     if (isRef(node.obj)) {
       const refKey = `${node.obj.num}, ${node.obj.gen}`;
@@ -221,11 +216,21 @@ export class PDFWalker {
   /**
    * The 'start' method kicks off the traversal of the PDF structure.
    */
-  public start() {
+  public start(): TreeNode {
     this.pdf.parseStartXRef();
     this.pdf.parse();
 
+    // Start traversal from the root node, which is the Trailer in the cross-reference table.
+    console.log("Trailer:", this.xref, this.xref.trailer);
+    const root = new TreeNode({
+      obj: this.xref.trailer,
+      name: "Trailer Dictionary",
+      depth: 0,
+    });
+
     // Begin the walk.
-    this.walk(this.root);
+    this.walk(root);
+
+    return root;
   }
 }
