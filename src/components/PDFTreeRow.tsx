@@ -44,7 +44,7 @@ function PDFTreeLine(props: {
   };
   return (
     <>
-      <div className="flex items-center gap-1 min-h-[24px]">
+      <div className="flex items-center gap-1 h-[24px]">
         {getExpandIcon()}
         <props.icon
           className={`${props.iconColor} min-w-[16px] min-h-[16px]`}
