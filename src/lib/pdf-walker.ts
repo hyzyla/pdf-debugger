@@ -65,6 +65,7 @@ export class TreeNode {
 
   visited: boolean = false;
   parent?: TreeNode;
+  walker: PDFWalker;
   private _children: TreeNode[] | null = null;
 
   constructor(options: {
@@ -73,6 +74,7 @@ export class TreeNode {
     depth: number;
     ref?: any;
     parent?: TreeNode;
+    walker: PDFWalker;
   }) {
     this.obj = options.obj;
     this.name = options.name;
@@ -80,6 +82,7 @@ export class TreeNode {
     this.ref = options.ref;
     this.parent = options.parent;
     this._children = null;
+    this.walker = options.walker;
   }
 
   resolve(xref: any) {
@@ -99,7 +102,6 @@ export class TreeNode {
     const depth = this.depth + 1;
     const { obj } = this;
     const children: TreeNode[] = [];
-    this._children = children;
 
     if (isDict(obj)) {
       const keys = obj.getKeys();
@@ -111,12 +113,11 @@ export class TreeNode {
             name: key,
             depth,
             parent: this,
+            walker: this.walker,
           })
         );
       }
-      return children;
-    }
-    if (isArray(obj)) {
+    } else if (isArray(obj)) {
       for (const [index, value] of obj.entries()) {
         children.push(
           new ArrayItemTreeNode({
@@ -124,13 +125,11 @@ export class TreeNode {
             depth,
             parent: this,
             index: index,
+            walker: this.walker,
           })
         );
       }
-      return children;
-    }
-
-    if (isStream(obj)) {
+    } else if (isStream(obj)) {
       // Stream objects have a dictionary and a stream contents.
       const keys = obj.dict.getKeys();
       for (const key of keys) {
@@ -141,6 +140,7 @@ export class TreeNode {
             name: key,
             depth,
             parent: this,
+            walker: this.walker,
           })
         );
       }
@@ -149,12 +149,15 @@ export class TreeNode {
           obj: new StreamContent(obj),
           depth,
           parent: this,
+          walker: this.walker,
         })
       );
-      return children;
     }
 
     this._children = children;
+    for (const child of children) {
+      this.walker.resolve(child);
+    }
     return children;
   }
 }
@@ -167,11 +170,13 @@ export class ArrayItemTreeNode extends TreeNode {
     depth: number;
     parent?: TreeNode;
     index: number;
+    walker: PDFWalker;
   }) {
     super({
       obj: options.obj,
       depth: options.depth,
       parent: options.parent,
+      walker: options.walker,
     });
     this.index = options.index;
   }
@@ -183,20 +188,17 @@ export class ArrayItemTreeNode extends TreeNode {
  */
 export class PDFWalker {
   pdf: core.PDFDocument;
-  maxDepth: number;
 
   xref: any;
 
   refSet: Set<any> = new Set();
 
-  constructor(options: { pdf: core.PDFDocument; maxDepth: number }) {
+  constructor(options: { pdf: core.PDFDocument }) {
     this.pdf = options.pdf;
     this.xref = this.pdf.xref;
-    this.maxDepth = options.maxDepth;
   }
 
-  private walk(node: TreeNode) {
-    console.log("Walking node:", node.name, node.depth);
+  resolve(node: TreeNode) {
     // If the node is a reference, resolve it.
     if (isRef(node.obj)) {
       const refKey = `${node.obj.num}, ${node.obj.gen}`;
@@ -205,11 +207,6 @@ export class PDFWalker {
       }
       node.resolve(this.xref);
       this.refSet.add(refKey);
-    }
-
-    // Recursively walk through the children of the node.
-    for (const child of node.children) {
-      this.walk(child);
     }
   }
 
@@ -226,10 +223,11 @@ export class PDFWalker {
       obj: this.xref.trailer,
       name: "Trailer Dictionary",
       depth: 0,
+      walker: this,
     });
 
     // Begin the walk.
-    this.walk(root);
+    this.resolve(root);
 
     return root;
   }

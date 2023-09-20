@@ -1,8 +1,11 @@
 "use client";
 import { PDFTree } from "@/components/PDFTree";
-import { usePDF } from "@/lib/load-pdf-hook";
+import { loadPDFDocument } from "@/lib/load-pdf-hook";
+import { usePDFDebuggerStore } from "@/state";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import * as core from "@hyzyla/pdfjs-core";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 function PDFDropzone(props: { onDrop: (file: Blob) => void }) {
   const onDrop = useCallback(
@@ -23,11 +26,8 @@ function PDFDropzone(props: { onDrop: (file: Blob) => void }) {
 
   return (
     <div
-      {...getRootProps({
-        // className:
-        //   "border-2 border-gray-200 rounded-lg p-4 bg-gray-20 h-full border-dashed flex flex-col justify-center items-center cursor-pointer text-gray-500",
-      })}
-      className="border-2 border-gray-200 rounded-lg p-4 bg-gray-20 flex-grow border-dashed flex flex-col justify-center items-center cursor-pointer text-gray-500"
+      {...getRootProps()}
+      className="border-2 border-gray-200 rounded-lg p-4 bg-gray-20 flex-1 border-dashed flex flex-col justify-center items-center cursor-pointer text-gray-500"
     >
       <input {...getInputProps()} />
       <p>Drag drop some files here, or click to select files</p>
@@ -35,52 +35,51 @@ function PDFDropzone(props: { onDrop: (file: Blob) => void }) {
   );
 }
 
-type SourceViewerScreen = "dropzone" | "loading" | "pdf";
+function PDFViewerScreen(props: {
+  pdfDocument: core.PDFDocument;
+  pdfName: string | null;
+}) {
+  return <PDFTree pdf={props.pdfDocument} name={props.pdfName} />;
+}
 
 export function SourceViewer() {
-  const [screen, setScreen] = useState<SourceViewerScreen>("dropzone");
-  const [pdfBlob, setPdfBlob] = useState<Blob | null>(null);
-  const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
-  const [pdfName, setPdfName] = useState<string | null>(null);
-  const pdf = usePDF(pdfBytes);
+  const store = usePDFDebuggerStore();
 
-  useEffect(() => {
-    async function laodPdf() {
-      if (pdfBlob === null) return;
-      const bytes = await pdfBlob.arrayBuffer();
-      setPdfBytes(new Uint8Array(bytes));
-      setPdfName(pdfBlob.name);
-      setScreen("pdf");
-    }
-    laodPdf();
-  }, [pdfBlob]);
-
-  const onHeaderClick = () => {
-    // clean state
-    setPdfBlob(null);
-    setPdfBytes(null);
-    setPdfName(null);
-    setScreen("dropzone");
+  const loadPDF = async (blob: Blob) => {
+    const bytes = await blob.arrayBuffer();
+    const pdfBytes = new Uint8Array(bytes);
+    const pdf = loadPDFDocument(pdfBytes);
+    store.onPDFLoad(pdfBytes, blob.name, pdf);
   };
 
-  // const pdf = usePDF();
+  const onPDFDrop = (file: Blob) => {
+    store.onPDFDrop(file);
+    loadPDF(file);
+  };
+
+  const onHeaderClick = () => {
+    store.reset();
+  };
+
   return (
-    <main className="p-5 gap-3 flex flex-col min-h-screen">
-      <h1 className="text-2xl font-bold cursor-pointer" onClick={onHeaderClick}>
+    <main className="p-5 gap-3 flex flex-col h-screen max-h-screen">
+      <h1
+        className="text-2xl font-bold cursor-pointer flex"
+        onClick={onHeaderClick}
+      >
         PDF debugger
       </h1>
-      <div className="border-2 border-gray-200 rounded-xl p-4 flex-grow flex">
-        {screen === "dropzone" && (
-          <PDFDropzone
-            onDrop={(file) => {
-              setPdfBlob(file);
-              setScreen("loading");
-            }}
+      <div className="border-2 border-gray-200 rounded-xl flex-1 flex overflow-hidden flex-row">
+        {store.screen === "dropzone" && <PDFDropzone onDrop={onPDFDrop} />}
+        {store.screen === "loading" && <div>Loading...</div>}
+        {store.screen === "pdf" && (
+          <PDFViewerScreen
+            pdfDocument={store.pdfDocument}
+            pdfName={store.pdfName}
           />
         )}
-        {screen === "loading" && <p>Loading...</p>}
-        {screen === "pdf" && pdf && <PDFTree pdf={pdf} name={pdfName} />}
       </div>
+      <div className="flex flex-row gap-2">Footer</div>
     </main>
   );
 }

@@ -13,7 +13,11 @@ import {
 import { useState } from "react";
 import { AiOutlineNumber } from "react-icons/ai";
 import { BsTextIndentRight } from "react-icons/bs";
-import { MdChevronRight, MdExpandMore } from "react-icons/md";
+import {
+  MdChevronRight,
+  MdExpandMore,
+  MdOutlineQuestionMark,
+} from "react-icons/md";
 import { PiBracketsCurlyBold, PiBracketsSquareBold } from "react-icons/pi";
 import {
   TbArrowsSplit2,
@@ -23,6 +27,12 @@ import {
   TbSquareLetterF,
 } from "react-icons/tb";
 import { VscFileBinary } from "react-icons/vsc";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 function PDFTreeLine(props: {
   icon: React.ComponentType<any>;
@@ -56,12 +66,16 @@ function PDFTreeLine(props: {
   );
 }
 
-export function PDFTreeRow(props: { node: TreeNode }) {
+export function PDFTreeRow(props: {
+  node: TreeNode;
+  onClick: (node: TreeNode) => void;
+}) {
   const node = props.node;
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(node.depth < 10);
 
-  const toggleExpanded = () => {
+  const onClick = () => {
     setExpanded(!expanded);
+    props.onClick(node);
   };
 
   const getLine = () => {
@@ -180,7 +194,7 @@ export function PDFTreeRow(props: { node: TreeNode }) {
   return (
     <div>
       <div
-        onClick={toggleExpanded}
+        onClick={onClick}
         className="cursor-pointer hover:bg-gray-200 px-2 rounded select-none flex gap-1 min-h-6 flex-row items-start"
       >
         {getLine()}
@@ -189,7 +203,7 @@ export function PDFTreeRow(props: { node: TreeNode }) {
         <ul className="ml-6">
           {node.children.map((child) => (
             <li key={child.name}>
-              <PDFTreeRow node={child} />
+              <PDFTreeRow node={child} onClick={props.onClick} />
             </li>
           ))}
         </ul>
