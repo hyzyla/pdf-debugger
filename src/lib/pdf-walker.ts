@@ -57,8 +57,8 @@ export class StreamContent {
   }
 }
 
-export class TreeNode {
-  obj: ObjType;
+export class TreeNode<T extends ObjType = ObjType> {
+  obj: T;
   name?: string;
   depth: number;
   ref?: core.Ref;
@@ -69,7 +69,7 @@ export class TreeNode {
   private _children: TreeNode[] | null = null;
 
   constructor(options: {
-    obj: ObjType;
+    obj: T;
     name?: string;
     depth: number;
     ref?: any;
@@ -160,6 +160,42 @@ export class TreeNode {
     }
     return children;
   }
+
+  isDict(): this is TreeNode<core.Dict> {
+    return isDict(this.obj);
+  }
+
+  isRef(): this is TreeNode<core.Ref> {
+    return isRef(this.obj);
+  }
+
+  isStream(): this is TreeNode<core.BaseStream> {
+    return isStream(this.obj);
+  }
+
+  isStreamContent(): this is TreeNode<StreamContent> {
+    return isStreamContent(this.obj);
+  }
+
+  isArray(): this is TreeNode<ObjType[]> {
+    return isArray(this.obj);
+  }
+
+  isNumber(): this is TreeNode<number> {
+    return isNumber(this.obj);
+  }
+
+  isString(): this is TreeNode<string> {
+    return isString(this.obj);
+  }
+
+  isName(): this is TreeNode<core.Name> {
+    return isName(this.obj);
+  }
+
+  isBoolean(): this is TreeNode<boolean> {
+    return isBoolean(this.obj);
+  }
 }
 
 export class ArrayItemTreeNode extends TreeNode {
@@ -221,7 +257,7 @@ export class PDFWalker {
     console.log("Trailer:", this.xref, this.xref.trailer);
     const root = new TreeNode({
       obj: this.xref.trailer,
-      name: "Trailer Dictionary",
+      name: undefined,
       depth: 0,
       walker: this,
     });

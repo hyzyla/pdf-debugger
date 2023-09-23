@@ -6,6 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import * as core from "@hyzyla/pdfjs-core";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { BsTelegram } from "react-icons/bs";
+import { MdAlternateEmail, MdEmail } from "react-icons/md";
 
 function PDFDropzone(props: { onDrop: (file: Blob) => void }) {
   const onDrop = useCallback(
@@ -79,7 +81,20 @@ export function SourceViewer() {
           />
         )}
       </div>
-      <div className="flex flex-row gap-2">Footer</div>
+      <div className="flex flex-row gap-4">
+        <a
+          href="https://t.me/hyzyla"
+          target="_blank"
+          className="flex flex-row gap-1 items-center"
+        >
+          <BsTelegram className="text-xl" />
+          <div>@hyzyla</div>
+        </a>
+        <div className="flex flex-row gap-1 items-center">
+          <MdEmail className="text-xl" />
+          <div>hyzyla@gmail.com</div>
+        </div>
+      </div>
     </main>
   );
 }
