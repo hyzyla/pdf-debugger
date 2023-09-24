@@ -71,7 +71,7 @@ export function PDFTreeRow(props: {
 
   const onRefClick = (e: React.MouseEvent, node: TreeNode<core.Ref>) => {
     e.stopPropagation();
-    console.log(node);
+
     const element = document.getElementById(
       `ref-${node.obj.num}-${node.obj.gen}`
     );

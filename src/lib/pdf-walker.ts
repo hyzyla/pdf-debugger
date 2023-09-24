@@ -97,8 +97,6 @@ export class TreeNode<T extends ObjType = ObjType> {
       return this._children;
     }
 
-    console.log("Getting children of:", this.name, this.depth, this.obj);
-
     const depth = this.depth + 1;
     const { obj } = this;
     const children: TreeNode[] = [];
@@ -254,7 +252,6 @@ export class PDFWalker {
     this.pdf.parse();
 
     // Start traversal from the root node, which is the Trailer in the cross-reference table.
-    console.log("Trailer:", this.xref, this.xref.trailer);
     const root = new TreeNode({
       obj: this.xref.trailer,
       name: undefined,
