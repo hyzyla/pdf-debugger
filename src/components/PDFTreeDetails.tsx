@@ -296,7 +296,7 @@ export function PDFTreeRowDetails(props: { node: TreeNode }) {
   };
   return (
     // break words in pre
-    <div className="p-4 prose prose-pre:whitespace-pre-wrap prose-pre:break-words">
+    <div className="p-2 prose prose-pre:whitespace-pre-wrap prose-pre:break-words">
       {getDtails()}
     </div>
   );

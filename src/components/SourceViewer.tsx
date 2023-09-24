@@ -43,6 +43,36 @@ function PDFViewerScreen(props: {
   return <PDFTree pdf={props.pdfDocument} name={props.pdfName} />;
 }
 
+function Footer() {
+  return (
+    <div className="flex flex-row items-center gap-3 h-[24px]">
+      <a
+        href="https://t.me/hyzyla"
+        target="_blank"
+        className="flex flex-row gap-1 items-center"
+      >
+        <BsTelegram className="mt-[2px]" />
+        @hyzyla
+      </a>
+      <div className="flex flex-row gap-1 items-center">
+        <MdEmail className="mt-[2px]" />
+        hyzyla@gmail.com
+      </div>
+    </div>
+  );
+}
+
+function Header(props: { onClick: () => void }) {
+  return (
+    <h1
+      className="text-2xl font-bold cursor-pointer flex pb-4"
+      onClick={props.onClick}
+    >
+      PDF debugger
+    </h1>
+  );
+}
+
 export function SourceViewer() {
   const store = usePDFDebuggerStore();
 
@@ -64,12 +94,7 @@ export function SourceViewer() {
 
   return (
     <main className="p-5 gap-3 flex flex-col h-screen max-h-screen">
-      <h1
-        className="text-2xl font-bold cursor-pointer flex"
-        onClick={onHeaderClick}
-      >
-        PDF debugger
-      </h1>
+      <Header onClick={onHeaderClick} />
       <div className="border-2 border-gray-200 rounded-xl flex-1 flex overflow-hidden flex-row">
         {store.screen === "dropzone" && <PDFDropzone onDrop={onPDFDrop} />}
         {store.screen === "loading" && <div>Loading...</div>}
@@ -80,20 +105,7 @@ export function SourceViewer() {
           />
         )}
       </div>
-      <div className="flex flex-row items-center gap-3 h-[24px]">
-        <a
-          href="https://t.me/hyzyla"
-          target="_blank"
-          className="flex flex-row gap-1 items-center"
-        >
-          <BsTelegram className="mt-[2px]" />
-          @hyzyla
-        </a>
-        <div className="flex flex-row gap-1 items-center">
-          <MdEmail className="mt-[2px]" />
-          hyzyla@gmail.com
-        </div>
-      </div>
+      <Footer />
     </main>
   );
 }

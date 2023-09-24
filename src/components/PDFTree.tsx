@@ -2,18 +2,9 @@ import { PDFTreeRowDetails } from "@/components/PDFTreeDetails";
 import { PDFTreeRow } from "@/components/PDFTreeRow";
 import { PDFWalker, TreeNode } from "@/lib/pdf-walker";
 import * as core from "@hyzyla/pdfjs-core";
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-export function PDFTree(props: { pdf: core.PDFDocument; name: string | null }) {
-  const [selected, setSelected] = useState<TreeNode | null>(null);
-  const walker = new PDFWalker({ pdf: props.pdf });
-  const root = walker.start();
+function useResizer() {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState<null | number>(null);
@@ -62,9 +53,19 @@ export function PDFTree(props: { pdf: core.PDFDocument; name: string | null }) {
     };
   }, [resize, stopResizing]);
 
+  return { sidebarRef, isResizing, startResizing, stopResizing, sidebarWidth };
+}
+
+export function PDFTree(props: { pdf: core.PDFDocument; name: string | null }) {
+  const [selected, setSelected] = useState<TreeNode | null>(null);
+  const walker = new PDFWalker({ pdf: props.pdf });
+  const root = walker.start();
+
+  const { sidebarRef, startResizing, sidebarWidth } = useResizer();
+
   return (
     <>
-      <div className="overflow-y-auto w-1/3 flex-1">
+      <div className="overflow-y-auto w-1/3 flex-1 p-2">
         <PDFTreeRow node={root} onClick={setSelected} />
       </div>
       <div
