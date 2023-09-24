@@ -13,11 +13,7 @@ import {
 import { useState } from "react";
 import { AiOutlineNumber } from "react-icons/ai";
 import { BsTextIndentRight } from "react-icons/bs";
-import {
-  MdChevronRight,
-  MdExpandMore,
-  MdOutlineQuestionMark,
-} from "react-icons/md";
+import { MdChevronRight, MdExpandMore } from "react-icons/md";
 import { PiBracketsCurlyBold, PiBracketsSquareBold } from "react-icons/pi";
 import {
   TbArrowsSplit2,
@@ -27,12 +23,7 @@ import {
   TbSquareLetterF,
 } from "react-icons/tb";
 import { VscFileBinary } from "react-icons/vsc";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import * as core from "@hyzyla/pdfjs-core";
 
 function PDFTreeLine(props: {
   icon: React.ComponentType<any>;
@@ -78,6 +69,26 @@ export function PDFTreeRow(props: {
     props.onClick(node);
   };
 
+  const onRefClick = (e: React.MouseEvent, node: TreeNode<core.Ref>) => {
+    e.stopPropagation();
+    console.log(node);
+    const element = document.getElementById(
+      `ref-${node.obj.num}-${node.obj.gen}`
+    );
+    if (!element) return;
+
+    element.scrollIntoView();
+
+    // highlight the element
+
+    element.classList.add("bg-opacity-100");
+    element.classList.remove("bg-opacity-0");
+    setTimeout(() => {
+      element.classList.remove("bg-opacity-100");
+      element.classList.add("bg-opacity-0");
+    }, 1000);
+  };
+
   const getLine = () => {
     // const isParentArray = node.parent && isArray(node.parent.obj);
     const obj = node.obj;
@@ -101,13 +112,17 @@ export function PDFTreeRow(props: {
           node={node}
         />
       );
-    } else if (isRef(obj)) {
+    } else if (node.isRef()) {
       return (
         <PDFTreeLine
           icon={TbExternalLink}
           iconColor="text-magenta-600"
           name={node.name}
-          value={`ref(num=${obj.num}, gen=${obj.gen})`}
+          value={
+            <div onClick={(e) => onRefClick(e, node)}>
+              ref(num={node.obj.num}, gen={node.obj.gen})
+            </div>
+          }
           expanded={expanded}
           node={node}
         />
@@ -191,11 +206,14 @@ export function PDFTreeRow(props: {
     }
   };
 
+  const ref = props.node.ref;
+
   return (
     <div>
       <div
+        id={ref ? `ref-${ref.num}-${ref.gen}` : undefined}
         onClick={onClick}
-        className="cursor-pointer hover:bg-gray-200 px-2 rounded select-none flex gap-1 min-h-6 flex-row items-start"
+        className="cursor-pointer hover:bg-gray-200 px-2 rounded select-none flex gap-1 min-h-6 flex-row items-start bg-yellow-200 transition-all bg-opacity-0"
       >
         {getLine()}
       </div>

@@ -2,12 +2,11 @@
 import { PDFTree } from "@/components/PDFTree";
 import { loadPDFDocument } from "@/lib/load-pdf-hook";
 import { usePDFDebuggerStore } from "@/state";
-import { useCallback, useEffect, useState } from "react";
-import { useDropzone } from "react-dropzone";
 import * as core from "@hyzyla/pdfjs-core";
-import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 import { BsTelegram } from "react-icons/bs";
-import { MdAlternateEmail, MdEmail } from "react-icons/md";
+import { MdEmail } from "react-icons/md";
 
 function PDFDropzone(props: { onDrop: (file: Blob) => void }) {
   const onDrop = useCallback(
@@ -81,18 +80,18 @@ export function SourceViewer() {
           />
         )}
       </div>
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row items-center gap-3 h-[24px]">
         <a
           href="https://t.me/hyzyla"
           target="_blank"
           className="flex flex-row gap-1 items-center"
         >
-          <BsTelegram className="text-xl" />
-          <div>@hyzyla</div>
+          <BsTelegram className="mt-[2px]" />
+          @hyzyla
         </a>
         <div className="flex flex-row gap-1 items-center">
-          <MdEmail className="text-xl" />
-          <div>hyzyla@gmail.com</div>
+          <MdEmail className="mt-[2px]" />
+          hyzyla@gmail.com
         </div>
       </div>
     </main>
