@@ -64,7 +64,7 @@ export function PDFTree(props: { pdf: core.PDFDocument; name: string | null }) {
 
   return (
     <>
-      <div className="overflow-y-auto">
+      <div className="overflow-y-auto w-1/3 flex-1">
         <PDFTreeRow node={root} onClick={setSelected} />
       </div>
       <div
@@ -74,7 +74,7 @@ export function PDFTree(props: { pdf: core.PDFDocument; name: string | null }) {
       <div
         className="overflow-y-auto"
         ref={sidebarRef}
-        style={{ minWidth: sidebarWidth ?? "33%" }}
+        style={{ width: sidebarWidth ?? "33%" }}
       >
         {selected && <PDFTreeRowDetails node={selected} />}
       </div>
