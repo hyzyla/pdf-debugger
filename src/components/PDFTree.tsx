@@ -1,6 +1,7 @@
 import { PDFTreeRowDetails } from "@/components/PDFTreeDetails";
 import { PDFTreeRow } from "@/components/PDFTreeRow";
 import { PDFWalker, TreeNode } from "@/lib/pdf-walker";
+import { useMediaQuery } from "@/lib/use-media-query-hook";
 import * as core from "@hyzyla/pdfjs-core";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -58,14 +59,22 @@ function useResizer() {
 
 export function PDFTree(props: { pdf: core.PDFDocument; name: string | null }) {
   const [selected, setSelected] = useState<TreeNode | null>(null);
+  const isSmScreen = useMediaQuery("(max-width: 640px)");
   const walker = new PDFWalker({ pdf: props.pdf });
   const root = walker.start();
 
   const { sidebarRef, startResizing, sidebarWidth } = useResizer();
 
+  if (isSmScreen)
+    return (
+      <div className="overflow-y-auto flex-1 p-2">
+        <PDFTreeRow node={root} onClick={setSelected} />
+      </div>
+    );
+
   return (
     <>
-      <div className="overflow-y-auto w-1/3 flex-1 p-2">
+      <div className="overflow-y-auto sm:w-1/3 flex-1 p-2">
         <PDFTreeRow node={root} onClick={setSelected} />
       </div>
       <div

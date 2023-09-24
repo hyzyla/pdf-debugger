@@ -28,10 +28,26 @@ function PDFDropzone(props: { onDrop: (file: Blob) => void }) {
   return (
     <div
       {...getRootProps()}
-      className="border-2 border-gray-200 rounded-lg p-4 bg-gray-20 flex-1 border-dashed flex flex-col justify-center items-center cursor-pointer text-gray-500"
+      className="border-2 border-gray-200 rounded p-4 bg-gray-20 flex-1 border-dashed flex flex-col justify-center items-center cursor-pointer text-gray-500"
     >
       <input {...getInputProps()} />
       <p>Drag drop some files here, or click to select files</p>
+    </div>
+  );
+}
+
+function PDFDropzoneScreen(props: { onDrop: (file: Blob) => void }) {
+  return (
+    <div className="flex-1 flex flex-col gap-4">
+      <p>
+        This tool allows you to inspect the structure of a PDF file. It is built
+        on top of{" "}
+        <a href="https://github.com/mozilla/pdf.js" className="text-blue-700">
+          mozilla/PDF.js
+        </a>{" "}
+        library. To get started, drag and drop or select a PDF file below.
+      </p>
+      <PDFDropzone onDrop={props.onDrop} />{" "}
     </div>
   );
 }
@@ -40,7 +56,11 @@ function PDFViewerScreen(props: {
   pdfDocument: core.PDFDocument;
   pdfName: string | null;
 }) {
-  return <PDFTree pdf={props.pdfDocument} name={props.pdfName} />;
+  return (
+    <div className="border-2 border-gray-200 rounded flex-1 flex overflow-hidden flex-row">
+      <PDFTree pdf={props.pdfDocument} name={props.pdfName} />
+    </div>
+  );
 }
 
 function Footer() {
@@ -65,7 +85,7 @@ function Footer() {
 function Header(props: { onClick: () => void }) {
   return (
     <h1
-      className="text-2xl font-bold cursor-pointer flex pb-4"
+      className="text-2xl font-bold cursor-pointer flex"
       onClick={props.onClick}
     >
       PDF debugger
@@ -93,10 +113,12 @@ export function SourceViewer() {
   };
 
   return (
-    <main className="p-5 gap-3 flex flex-col h-screen max-h-screen">
+    <main className="p-3 gap-3 flex flex-col h-screen max-h-screen">
       <Header onClick={onHeaderClick} />
-      <div className="border-2 border-gray-200 rounded-xl flex-1 flex overflow-hidden flex-row">
-        {store.screen === "dropzone" && <PDFDropzone onDrop={onPDFDrop} />}
+      <div className="flex-1 flex overflow-hidden">
+        {store.screen === "dropzone" && (
+          <PDFDropzoneScreen onDrop={onPDFDrop} />
+        )}
         {store.screen === "loading" && <div>Loading...</div>}
         {store.screen === "pdf" && (
           <PDFViewerScreen
