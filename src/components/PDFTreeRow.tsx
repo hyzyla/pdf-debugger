@@ -33,15 +33,23 @@ function PDFTreeLine(props: {
   value?: React.ReactNode;
   expanded: boolean;
   node: TreeNode;
+  onExpandClick: (e: React.MouseEvent) => void;
 }) {
   const getExpandIcon = () => {
     if (props.node.children.length === 0) {
       return <div className="min-w-[16px] min-h-[16px]"></div>;
     }
-    return props.expanded ? (
-      <MdExpandMore className="min-w-[16px] min-h-[16px]" />
-    ) : (
-      <MdChevronRight className="min-w-[16px] min-h-[16px]" />
+    return (
+      <div
+        className="min-w-[16px] min-h-[16px] flex justify-center items-center hover:bg-gray-300 rounded"
+        onClick={props.onExpandClick}
+      >
+        {props.expanded ? (
+          <MdExpandMore className="min-w-[16px] min-h-[16px]" />
+        ) : (
+          <MdChevronRight className="min-w-[16px] min-h-[16px]" />
+        )}
+      </div>
     );
   };
   return (
@@ -69,6 +77,11 @@ export function PDFTreeRow(props: {
   const onClick = () => {
     setExpanded(!expanded);
     props.onClick(node);
+  };
+
+  const onExpandClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setExpanded(!expanded);
   };
 
   const onRefClick = (e: React.MouseEvent, node: TreeNode<core.Ref>) => {
@@ -101,6 +114,7 @@ export function PDFTreeRow(props: {
           name={node.name}
           expanded={expanded}
           node={node}
+          onExpandClick={onExpandClick}
         />
       );
     } else if (isArray(obj)) {
@@ -111,6 +125,7 @@ export function PDFTreeRow(props: {
           name={node.name}
           expanded={expanded}
           node={node}
+          onExpandClick={onExpandClick}
         />
       );
     } else if (node.isRef()) {
@@ -126,6 +141,7 @@ export function PDFTreeRow(props: {
           }
           expanded={expanded}
           node={node}
+          onExpandClick={onExpandClick}
         />
       );
     } else if (isStream(obj)) {
@@ -136,6 +152,7 @@ export function PDFTreeRow(props: {
           name={node.name}
           expanded={expanded}
           node={node}
+          onExpandClick={onExpandClick}
         />
       );
     } else if (isStreamContent(obj)) {
@@ -147,6 +164,7 @@ export function PDFTreeRow(props: {
           value={`[...stream contents...]`}
           expanded={expanded}
           node={node}
+          onExpandClick={onExpandClick}
         />
       );
     } else if (isName(obj)) {
@@ -158,6 +176,7 @@ export function PDFTreeRow(props: {
           value={`/${obj.name}`}
           expanded={expanded}
           node={node}
+          onExpandClick={onExpandClick}
         />
       );
     } else if (isNumber(obj)) {
@@ -169,6 +188,7 @@ export function PDFTreeRow(props: {
           value={obj.toString()}
           expanded={expanded}
           node={node}
+          onExpandClick={onExpandClick}
         />
       );
     } else if (isString(obj)) {
@@ -180,6 +200,7 @@ export function PDFTreeRow(props: {
           value={obj}
           expanded={expanded}
           node={node}
+          onExpandClick={onExpandClick}
         />
       );
     } else if (isBoolean(obj)) {
@@ -191,6 +212,7 @@ export function PDFTreeRow(props: {
           value={obj.toString()}
           expanded={expanded}
           node={node}
+          onExpandClick={onExpandClick}
         />
       );
     } else {
@@ -202,6 +224,7 @@ export function PDFTreeRow(props: {
           value={`[unknown]`}
           expanded={expanded}
           node={node}
+          onExpandClick={onExpandClick}
         />
       );
     }
