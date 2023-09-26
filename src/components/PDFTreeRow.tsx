@@ -24,6 +24,7 @@ import {
 } from "react-icons/tb";
 import { VscFileBinary } from "react-icons/vsc";
 import * as core from "@hyzyla/pdfjs-core";
+import classNames from "classnames";
 
 function PDFTreeLine(props: {
   icon: React.ComponentType<any>;
@@ -59,6 +60,7 @@ function PDFTreeLine(props: {
 
 export function PDFTreeRow(props: {
   node: TreeNode;
+  selected: TreeNode | null;
   onClick: (node: TreeNode) => void;
 }) {
   const node = props.node;
@@ -80,11 +82,10 @@ export function PDFTreeRow(props: {
     element.scrollIntoView();
 
     // highlight the element
-
+    element.classList.add("bg-yellow-200");
     element.classList.add("bg-opacity-100");
-    element.classList.remove("bg-opacity-0");
     setTimeout(() => {
-      element.classList.remove("bg-opacity-100");
+      element.classList.remove("bg-yellow-200");
       element.classList.add("bg-opacity-0");
     }, 1000);
   };
@@ -208,12 +209,19 @@ export function PDFTreeRow(props: {
 
   const ref = props.node.ref;
 
+  const isSelected = props.selected?.path === node.path;
   return (
     <div>
       <div
         id={ref ? `ref-${ref.num}-${ref.gen}` : undefined}
         onClick={onClick}
-        className="cursor-pointer hover:bg-gray-200 px-2 rounded select-none flex gap-1 min-h-6 flex-row items-start bg-yellow-200 transition-all bg-opacity-0"
+        className={classNames(
+          "cursor-pointer hover:bg-gray-200 px-2 rounded select-none flex gap-1 min-h-6 flex-row items-start  transition-all bg-opacity-0",
+          {
+            "bg-gray-100": isSelected,
+            "bg-opacity-100": isSelected,
+          }
+        )}
       >
         {getLine()}
       </div>
@@ -221,7 +229,11 @@ export function PDFTreeRow(props: {
         <ul className="ml-6">
           {node.children.map((child) => (
             <li key={child.name}>
-              <PDFTreeRow node={child} onClick={props.onClick} />
+              <PDFTreeRow
+                node={child}
+                onClick={props.onClick}
+                selected={props.selected}
+              />
             </li>
           ))}
         </ul>

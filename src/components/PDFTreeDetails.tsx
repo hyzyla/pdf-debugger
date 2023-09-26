@@ -46,7 +46,14 @@ const CodeBlock = (props: { code: string }) => {
 
   return (
     <div className="flex flex-col" style={blockStyle}>
-      <pre className="mt-0 mb-1">{props.code}</pre>
+      <pre
+        className="mt-0 mb-1"
+        style={{
+          overflowWrap: "anywhere",
+        }}
+      >
+        {props.code}
+      </pre>
       <div className="flex gap-2 self-end">
         <Button
           onClick={onCopy}

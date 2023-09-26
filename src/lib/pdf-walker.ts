@@ -60,6 +60,7 @@ export class StreamContent {
 export class TreeNode<T extends ObjType = ObjType> {
   obj: T;
   name?: string;
+  index?: number;
   depth: number;
   ref?: core.Ref;
 
@@ -67,10 +68,12 @@ export class TreeNode<T extends ObjType = ObjType> {
   parent?: TreeNode;
   walker: PDFWalker;
   private _children: TreeNode[] | null = null;
+  private _path: string | null = null;
 
   constructor(options: {
     obj: T;
     name?: string;
+    index?: number; // only used for array items
     depth: number;
     ref?: any;
     parent?: TreeNode;
@@ -78,6 +81,7 @@ export class TreeNode<T extends ObjType = ObjType> {
   }) {
     this.obj = options.obj;
     this.name = options.name;
+    this.index = options.index;
     this.depth = options.depth;
     this.ref = options.ref;
     this.parent = options.parent;
@@ -89,6 +93,26 @@ export class TreeNode<T extends ObjType = ObjType> {
     const fetched = xref.fetch(this.obj);
     this.ref = this.obj as core.Ref;
     this.obj = fetched;
+  }
+
+  get path(): string {
+    if (this._path !== null) {
+      return this._path;
+    }
+    // construct path by traversing up the tree
+    const path: string[] = [];
+    let node: TreeNode | undefined = this;
+    while (node) {
+      let part: string = node.name ?? node.index?.toString() ?? "";
+      // remove leading slash if present
+      if (part.startsWith("/")) {
+        part = part.slice(1);
+      }
+      path.unshift(part);
+      node = node.parent;
+    }
+    this._path = path.join(".");
+    return this._path;
   }
 
   get children(): TreeNode[] {
@@ -118,7 +142,7 @@ export class TreeNode<T extends ObjType = ObjType> {
     } else if (isArray(obj)) {
       for (const [index, value] of obj.entries()) {
         children.push(
-          new ArrayItemTreeNode({
+          new TreeNode({
             obj: value,
             depth,
             parent: this,
@@ -193,26 +217,6 @@ export class TreeNode<T extends ObjType = ObjType> {
 
   isBoolean(): this is TreeNode<boolean> {
     return isBoolean(this.obj);
-  }
-}
-
-export class ArrayItemTreeNode extends TreeNode {
-  index: number;
-
-  constructor(options: {
-    obj: ObjType;
-    depth: number;
-    parent?: TreeNode;
-    index: number;
-    walker: PDFWalker;
-  }) {
-    super({
-      obj: options.obj,
-      depth: options.depth,
-      parent: options.parent,
-      walker: options.walker,
-    });
-    this.index = options.index;
   }
 }
 
