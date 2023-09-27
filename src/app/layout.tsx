@@ -1,6 +1,8 @@
+import { AppPostHogProvider, PostHogPageview } from "@/app/providers";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <Suspense>
+        <PostHogPageview />
+      </Suspense>
+      <AppPostHogProvider>
+        <body className={inter.className}>{children}</body>
+      </AppPostHogProvider>
     </html>
   );
 }
