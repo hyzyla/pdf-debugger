@@ -3,6 +3,7 @@ import { PDFTree } from "@/components/PDFTree";
 import { loadPDFDocument } from "@/lib/load-pdf-hook";
 import { usePDFDebuggerStore } from "@/state";
 import * as core from "@hyzyla/pdfjs-core";
+import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { BsTelegram } from "react-icons/bs";
@@ -95,6 +96,7 @@ function Header(props: { onClick: () => void }) {
 
 export function SourceViewer() {
   const store = usePDFDebuggerStore();
+  const posthog = usePostHog();
 
   const loadPDF = async (blob: Blob) => {
     const bytes = await blob.arrayBuffer();
@@ -105,6 +107,10 @@ export function SourceViewer() {
 
   const onPDFDrop = (file: Blob) => {
     store.onPDFDrop(file);
+    posthog.capture("pdf_dropped", {
+      file_name: file.name,
+      file_size: file.size,
+    });
     loadPDF(file);
   };
 
