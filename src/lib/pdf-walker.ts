@@ -95,6 +95,38 @@ export class TreeNode<T extends ObjType = ObjType> {
     this.obj = fetched;
   }
 
+  toObjString(): string {
+    const { obj } = this;
+    if (isDict(obj)) {
+      return `<< ... >>`;
+    }
+    if (isArray(obj)) {
+      return `[ ... ]`;
+    }
+    if (isStream(obj)) {
+      return `stream`;
+    }
+    if (isStreamContent(obj)) {
+      return `stream content`;
+    }
+    if (isRef(obj)) {
+      return `ref(${obj.num}, ${obj.gen})`;
+    }
+    if (isName(obj)) {
+      return `/${obj.name}`;
+    }
+    if (isNumber(obj)) {
+      return `${obj}`;
+    }
+    if (isString(obj)) {
+      return `(${obj})`;
+    }
+    if (isBoolean(obj)) {
+      return `${obj}`;
+    }
+    return `${obj}`;
+  }
+
   get path(): string {
     if (this._path !== null) {
       return this._path;
@@ -217,6 +249,10 @@ export class TreeNode<T extends ObjType = ObjType> {
 
   isBoolean(): this is TreeNode<boolean> {
     return isBoolean(this.obj);
+  }
+
+  isNull(): this is TreeNode<null> {
+    return this.obj === null;
   }
 }
 

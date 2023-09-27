@@ -1,12 +1,7 @@
 import { PDFTreeRowDetails } from "@/components/PDFTreeDetails";
 import { PDFTreeRow } from "@/components/PDFTreeRow";
-import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { buttonVariants } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { PDFWalker, TreeNode } from "@/lib/pdf-walker";
 import { useMediaQuery } from "@/lib/use-media-query-hook";
 import { cn } from "@/lib/utils";
@@ -42,12 +37,6 @@ function useResizer() {
 
         const widthDiff = resizerX - mouseX;
         const sidebarWidth = sidebarRef.current?.clientWidth;
-        console.log("resizing", {
-          clientX: event.clientX,
-          left: current.getBoundingClientRect().left,
-          widthDiff,
-          sidebarWidth,
-        });
         setSidebarWidth(sidebarWidth ? sidebarWidth + widthDiff : null);
       }
     },

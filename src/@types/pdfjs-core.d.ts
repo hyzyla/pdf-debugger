@@ -25,6 +25,8 @@ declare module "@hyzyla/pdfjs-core" {
 
   class BaseStream {
     dict: Dict;
+    getBytes(): Uint8Array;
+    reset(): void;
   }
 
   class Stream {}

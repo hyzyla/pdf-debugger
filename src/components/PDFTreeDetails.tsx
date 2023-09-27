@@ -5,6 +5,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CSSProperties, use, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MdClose, MdCopyAll, MdExpand } from "react-icons/md";
+import {
+  fromByteArrayToBase64,
+  fromByteArrayToHexString,
+  fromStringToBase64,
+  fromStringToHexString,
+} from "@/lib/utils";
 
 type DetailProps<T> = {
   node: TreeNode<T>;
@@ -155,10 +161,11 @@ function StreamDetail({ node }: DetailProps<core.BaseStream>) {
       <pre>{syntax}</pre>
       <h3>Metadata</h3>
       <ul>
-        {node.obj.dict.getKeys().map((key) => {
-          const value = node.obj.dict.getRaw(key);
-          let valueStr = value.toString(); // todo: better value of dict key
+        {node.children.map((child) => {
+          const key = child.name;
+          if (!key) return null;
 
+          let valueStr = child.toObjString();
           return (
             <li key={key} className="font-mono">
               {key}: {valueStr}
@@ -171,10 +178,27 @@ function StreamDetail({ node }: DetailProps<core.BaseStream>) {
 }
 
 function StreamContentDetail({ node }: DetailProps<StreamContent>) {
+  const stream = node.obj.stream;
+  stream.reset();
+
+  const bytes = stream.getBytes();
   return (
     <>
       <h1>Stream Content</h1>
       <p>It&apos;s a actual content of a stream</p>
+      <h3>Content:</h3>
+      <Tabs defaultValue="base64">
+        <TabsList>
+          <TabsTrigger value="base64">Base64</TabsTrigger>
+          <TabsTrigger value="hex">Hex</TabsTrigger>
+        </TabsList>
+        <TabsContent value="base64">
+          <CodeBlock code={fromByteArrayToBase64(bytes)} />
+        </TabsContent>
+        <TabsContent value="hex">
+          <CodeBlock code={fromByteArrayToHexString(bytes)} />
+        </TabsContent>
+      </Tabs>
     </>
   );
 }
@@ -245,15 +269,10 @@ function StringDetail({ node }: DetailProps<string>) {
           <CodeBlock code={str} />
         </TabsContent>
         <TabsContent value="base64">
-          <CodeBlock code={btoa(str)} />
+          <CodeBlock code={fromStringToBase64(str)} />
         </TabsContent>
         <TabsContent value="hex">
-          <CodeBlock
-            code={str
-              .split("")
-              .map((c) => c.charCodeAt(0).toString(16))
-              .join("")}
-          />
+          <CodeBlock code={fromStringToHexString(str)} />
         </TabsContent>
       </Tabs>
     </>
@@ -272,6 +291,20 @@ function BooleanDetail({ node }: DetailProps<boolean>) {
       <pre>{syntax}</pre>
       <h3>Value:</h3>
       <pre>{node.obj.toString()}</pre>
+    </>
+  );
+}
+
+function NullDetail({ node }: DetailProps<null>) {
+  const syntax = node.name ? `/${node.name} null` : `[... null ...]`;
+  return (
+    <>
+      <h1>Null</h1>
+      <p>A null object (null).</p>
+      <h3>PDF Syntax:</h3>
+      <pre>{syntax}</pre>
+      <h3>Value:</h3>
+      <pre>null</pre>
     </>
   );
 }
@@ -297,6 +330,8 @@ export function PDFTreeRowDetails(props: { node: TreeNode }) {
       return <StringDetail node={node} />;
     } else if (node.isBoolean()) {
       return <BooleanDetail node={node} />;
+    } else if (node.isNull()) {
+      return <NullDetail node={node} />;
     } else {
       return <div>Unknown type</div>;
     }

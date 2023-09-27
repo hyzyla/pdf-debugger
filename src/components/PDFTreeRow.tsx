@@ -1,20 +1,12 @@
-import {
-  TreeNode,
-  isArray,
-  isBoolean,
-  isDict,
-  isName,
-  isNumber,
-  isRef,
-  isStream,
-  isStreamContent,
-  isString,
-} from "@/lib/pdf-walker";
+import { TreeNode } from "@/lib/pdf-walker";
+import * as core from "@hyzyla/pdfjs-core";
+import classNames from "classnames";
 import { useState } from "react";
 import { AiOutlineNumber } from "react-icons/ai";
 import { BsTextIndentRight } from "react-icons/bs";
 import { MdChevronRight, MdExpandMore } from "react-icons/md";
 import { PiBracketsCurlyBold, PiBracketsSquareBold } from "react-icons/pi";
+import { RiIndeterminateCircleLine } from "react-icons/ri";
 import {
   TbArrowsSplit2,
   TbBinary,
@@ -23,8 +15,6 @@ import {
   TbSquareLetterF,
 } from "react-icons/tb";
 import { VscFileBinary } from "react-icons/vsc";
-import * as core from "@hyzyla/pdfjs-core";
-import classNames from "classnames";
 
 function PDFTreeLine(props: {
   icon: React.ComponentType<any>;
@@ -72,7 +62,7 @@ export function PDFTreeRow(props: {
   onClick: (node: TreeNode) => void;
 }) {
   const node = props.node;
-  const [expanded, setExpanded] = useState(node.depth < 10);
+  const [expanded, setExpanded] = useState(node.depth < 4);
 
   const onClick = () => {
     setExpanded(!expanded);
@@ -105,8 +95,7 @@ export function PDFTreeRow(props: {
 
   const getLine = () => {
     // const isParentArray = node.parent && isArray(node.parent.obj);
-    const obj = node.obj;
-    if (isDict(obj)) {
+    if (node.isDict()) {
       return (
         <PDFTreeLine
           icon={PiBracketsCurlyBold}
@@ -117,7 +106,7 @@ export function PDFTreeRow(props: {
           onExpandClick={onExpandClick}
         />
       );
-    } else if (isArray(obj)) {
+    } else if (node.isArray()) {
       return (
         <PDFTreeLine
           icon={PiBracketsSquareBold}
@@ -135,7 +124,10 @@ export function PDFTreeRow(props: {
           iconColor="text-magenta-600"
           name={node.name}
           value={
-            <div onClick={(e) => onRefClick(e, node)}>
+            <div
+              onClick={(e) => onRefClick(e, node)}
+              className="hover:bg-gray-300 rounded"
+            >
               ref(num={node.obj.num}, gen={node.obj.gen})
             </div>
           }
@@ -144,7 +136,7 @@ export function PDFTreeRow(props: {
           onExpandClick={onExpandClick}
         />
       );
-    } else if (isStream(obj)) {
+    } else if (node.isStream()) {
       return (
         <PDFTreeLine
           icon={VscFileBinary}
@@ -155,7 +147,7 @@ export function PDFTreeRow(props: {
           onExpandClick={onExpandClick}
         />
       );
-    } else if (isStreamContent(obj)) {
+    } else if (node.isStreamContent()) {
       return (
         <PDFTreeLine
           icon={TbBinary}
@@ -167,49 +159,61 @@ export function PDFTreeRow(props: {
           onExpandClick={onExpandClick}
         />
       );
-    } else if (isName(obj)) {
+    } else if (node.isName()) {
       return (
         <PDFTreeLine
           icon={TbSquareLetterF}
           iconColor="text-yellow-600"
           name={node.name}
-          value={`/${obj.name}`}
+          value={`/${node.obj.name}`}
           expanded={expanded}
           node={node}
           onExpandClick={onExpandClick}
         />
       );
-    } else if (isNumber(obj)) {
+    } else if (node.isNumber()) {
       return (
         <PDFTreeLine
           icon={AiOutlineNumber}
           iconColor="text-blue-600"
           name={node.name}
-          value={obj.toString()}
+          value={node.obj.toString()}
           expanded={expanded}
           node={node}
           onExpandClick={onExpandClick}
         />
       );
-    } else if (isString(obj)) {
+    } else if (node.isString()) {
       return (
         <PDFTreeLine
           icon={BsTextIndentRight}
           iconColor="text-red-600"
           name={node.name}
-          value={obj}
+          value={node.obj}
           expanded={expanded}
           node={node}
           onExpandClick={onExpandClick}
         />
       );
-    } else if (isBoolean(obj)) {
+    } else if (node.isBoolean()) {
       return (
         <PDFTreeLine
           icon={TbArrowsSplit2}
           iconColor="text-green-600"
           name={node.name}
-          value={obj.toString()}
+          value={node.obj.toString()}
+          expanded={expanded}
+          node={node}
+          onExpandClick={onExpandClick}
+        />
+      );
+    } else if (node.isNull()) {
+      return (
+        <PDFTreeLine
+          icon={RiIndeterminateCircleLine}
+          iconColor="text-gray-500"
+          name={node.name}
+          value={`null`}
           expanded={expanded}
           node={node}
           onExpandClick={onExpandClick}
