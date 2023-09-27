@@ -127,6 +127,10 @@ export class TreeNode<T extends ObjType = ObjType> {
     return `${obj}`;
   }
 
+  get uniqueId(): string {
+    return this.name || this.index?.toString() || "";
+  }
+
   get path(): string {
     if (this._path !== null) {
       return this._path;

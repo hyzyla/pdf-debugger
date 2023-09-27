@@ -167,7 +167,7 @@ function StreamDetail({ node }: DetailProps<core.BaseStream>) {
 
           let valueStr = child.toObjString();
           return (
-            <li key={key} className="font-mono">
+            <li key={child.uniqueId} className="font-mono">
               {key}: {valueStr}
             </li>
           );

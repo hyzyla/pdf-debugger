@@ -255,7 +255,7 @@ export function PDFTreeRow(props: {
       {expanded && (
         <ul className="ml-6">
           {node.children.map((child) => (
-            <li key={child.name}>
+            <li key={child.uniqueId}>
               <PDFTreeRow
                 node={child}
                 onClick={props.onClick}
