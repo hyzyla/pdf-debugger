@@ -8,6 +8,7 @@ import * as core from "@hyzyla/pdfjs-core";
 import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
+import { AiFillHeart } from "react-icons/ai";
 import { BsTelegram } from "react-icons/bs";
 import { MdEmail, MdQuestionMark, MdUpload } from "react-icons/md";
 
@@ -85,7 +86,7 @@ function PDFViewerScreen(props: {
 
 function Footer() {
   return (
-    <div className="flex flex-row items-center gap-3 h-[24px]">
+    <div className="flex flex-row items-center gap-x-5 gap-y-2 flex-wrap">
       <a
         href="https://t.me/hyzyla"
         target="_blank"
@@ -97,6 +98,17 @@ function Footer() {
       <div className="flex flex-row gap-1 items-center">
         <MdEmail className="mt-[2px]" />
         hyzyla@gmail.com
+      </div>
+      <div className="flex flex-row gap-1 items-center">
+        <AiFillHeart className="mt-[2px]" />
+        built on top of{" "}
+        <a
+          href="https://mozilla.github.io/pdf.js/"
+          target="_blank"
+          className="text-blue-500"
+        >
+          PDF.js
+        </a>
       </div>
     </div>
   );
