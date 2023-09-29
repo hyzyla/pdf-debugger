@@ -90,7 +90,7 @@ export function PDFTree(props: { pdf: core.PDFDocument; name: string | null }) {
               </DialogTrigger>
               <DialogContent
                 className={
-                  "lg:max-w-screen-lg overflow-y-scroll max-h-screen min-h-screen"
+                  "lg:max-w-screen-lg overflow-y-scroll max-h-[100dvh] min-h-[100dvh]"
                 }
               >
                 <PDFTreeRowDetails node={selected} />
