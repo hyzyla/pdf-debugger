@@ -38,7 +38,7 @@ function PDFDropzone(props: { onDrop: (file: Blob) => void }) {
     >
       <input {...getInputProps()} />
       <MdUpload className="text-6xl" />
-      <p>Drag drop some files here, or click to select files</p>
+      <p>Drag and drop PDF file here</p>
     </div>
   );
 }
@@ -50,7 +50,7 @@ function PDFDropzoneTryExample(props: { onExample: () => void }) {
       onClick={props.onExample}
     >
       <MdQuestionMark className="text-6xl" />
-      <p>...or click here to try example PDF file</p>
+      <p className="text-center">... try example PDF file</p>
     </div>
   );
 }
