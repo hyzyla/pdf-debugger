@@ -157,7 +157,7 @@ export function SourceViewer() {
   };
 
   return (
-    <main className="p-3 gap-3 flex flex-col h-screen max-h-screen">
+    <main className="p-3 gap-3 flex flex-col h-[100dvh] max-h-[100dvh]">
       <Header onClick={onHeaderClick} />
       <div className="flex-1 flex overflow-hidden">
         {store.screen === "dropzone" && (
