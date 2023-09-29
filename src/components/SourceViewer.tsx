@@ -60,13 +60,9 @@ function PDFDropzoneScreen(props: {
   onExample: () => void;
 }) {
   return (
-    <div className="flex-1 flex flex-col gap-4 overflow-y-scroll max-w-[40rem]">
-      <p className=" pb-6">
-        This tool allows you to inspect the structure of a PDF file. It is built
-        on top of{" "}
-        <a href="https://github.com/mozilla/pdf.js" className="text-blue-700">
-          mozilla/PDF.js
-        </a>
+    <div className="flex-1 flex flex-col gap-6 overflow-y-scroll max-w-[40rem]">
+      <p className="">
+        This tool allows you to inspect tree structure of a PDF file:
       </p>
       <div className="flex sm:flex-row flex-col gap-4 h-96">
         <PDFDropzone onDrop={props.onDrop} />
