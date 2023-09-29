@@ -1,13 +1,18 @@
 "use client";
 import { PDFTree } from "@/components/PDFTree";
+import { loadPdfExample } from "@/lib/load-pdf-example";
 import { loadPDFDocument } from "@/lib/load-pdf-hook";
+import { cn } from "@/lib/utils";
 import { usePDFDebuggerStore } from "@/state";
 import * as core from "@hyzyla/pdfjs-core";
 import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { BsTelegram } from "react-icons/bs";
-import { MdEmail } from "react-icons/md";
+import { MdEmail, MdQuestionMark, MdUpload } from "react-icons/md";
+
+const DROPZONE_COMMON_CLASSES =
+  "border-2 border-gray-200 rounded p-4 bg-gray-20 flex-0 border-dashed flex flex-col justify-center items-center cursor-pointer text-gray-500 sm:w-1/2 gap-5 py-20 px-10";
 
 function PDFDropzone(props: { onDrop: (file: Blob) => void }) {
   const onDrop = useCallback(
@@ -29,26 +34,44 @@ function PDFDropzone(props: { onDrop: (file: Blob) => void }) {
   return (
     <div
       {...getRootProps()}
-      className="border-2 border-gray-200 rounded p-4 bg-gray-20 flex-1 border-dashed flex flex-col justify-center items-center cursor-pointer text-gray-500"
+      className={cn(DROPZONE_COMMON_CLASSES, "border-green-700")}
     >
       <input {...getInputProps()} />
+      <MdUpload className="text-6xl" />
       <p>Drag drop some files here, or click to select files</p>
     </div>
   );
 }
 
-function PDFDropzoneScreen(props: { onDrop: (file: Blob) => void }) {
+function PDFDropzoneTryExample(props: { onExample: () => void }) {
   return (
-    <div className="flex-1 flex flex-col gap-4">
-      <p>
+    <div
+      className={cn(DROPZONE_COMMON_CLASSES, "border-gray-400")}
+      onClick={props.onExample}
+    >
+      <MdQuestionMark className="text-6xl" />
+      <p>...or click here to try example PDF file</p>
+    </div>
+  );
+}
+
+function PDFDropzoneScreen(props: {
+  onDrop: (file: Blob) => void;
+  onExample: () => void;
+}) {
+  return (
+    <div className="flex-1 flex flex-col gap-4 overflow-y-scroll max-w-[40rem]">
+      <p className=" pb-6">
         This tool allows you to inspect the structure of a PDF file. It is built
         on top of{" "}
         <a href="https://github.com/mozilla/pdf.js" className="text-blue-700">
           mozilla/PDF.js
-        </a>{" "}
-        library. To get started, drag and drop or select a PDF file below.
+        </a>
       </p>
-      <PDFDropzone onDrop={props.onDrop} />{" "}
+      <div className="flex sm:flex-row flex-col gap-4 h-96">
+        <PDFDropzone onDrop={props.onDrop} />
+        <PDFDropzoneTryExample onExample={props.onExample} />
+      </div>
     </div>
   );
 }
@@ -114,6 +137,13 @@ export function SourceViewer() {
     loadPDF(file);
   };
 
+  const onExamplePDFDrop = async () => {
+    store.onExampleClick();
+    const pdfBytes = await loadPdfExample();
+    const pdf = loadPDFDocument(pdfBytes);
+    store.onPDFLoad(pdfBytes, "example.pdf", pdf);
+  };
+
   const onHeaderClick = () => {
     store.reset();
   };
@@ -123,7 +153,7 @@ export function SourceViewer() {
       <Header onClick={onHeaderClick} />
       <div className="flex-1 flex overflow-hidden">
         {store.screen === "dropzone" && (
-          <PDFDropzoneScreen onDrop={onPDFDrop} />
+          <PDFDropzoneScreen onDrop={onPDFDrop} onExample={onExamplePDFDrop} />
         )}
         {store.screen === "loading" && <div>Loading...</div>}
         {store.screen === "pdf" && (

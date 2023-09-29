@@ -26,6 +26,7 @@ type Screen = DropzoneScreen | LoadingScreen | PDFScreen;
 
 type PDFDebuggerStore = Screen & {
   onPDFDrop: (blob: Blob) => void;
+  onExampleClick: () => void;
   onPDFLoad: (
     pdfBytes: Uint8Array,
     pdfName: string,
@@ -41,6 +42,13 @@ export const usePDFDebuggerStore = create<PDFDebuggerStore>()((set) => ({
       screen: "loading",
       pdfBlob: blob,
       pdfName: blob.name,
+    });
+  },
+  onExampleClick: () => {
+    set({
+      screen: "loading",
+      pdfBlob: new Blob(),
+      pdfName: "example.pdf",
     });
   },
   onPDFLoad: (pdfBytes, pdfName, pdfDocument) => {
