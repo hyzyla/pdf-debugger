@@ -243,7 +243,7 @@ export function PDFTreeRow(props: {
         id={ref ? `ref-${ref.num}-${ref.gen}` : undefined}
         onClick={onClick}
         className={classNames(
-          "cursor-pointer hover:bg-gray-200 px-2 rounded select-none flex gap-1 min-h-6 flex-row items-start  transition-all bg-opacity-0",
+          "cursor-pointer hover:bg-gray-200 px-2 rounded flex gap-1 min-h-6 flex-row items-start  transition-all bg-opacity-0",
           {
             "bg-gray-100": isSelected,
             "bg-opacity-100": isSelected,
