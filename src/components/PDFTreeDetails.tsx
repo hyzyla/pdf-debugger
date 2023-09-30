@@ -185,7 +185,7 @@ function StreamContentDetail({ node }: DetailProps<StreamContent>) {
   return (
     <>
       <h1>Stream Content</h1>
-      <p>It&apos;s a actual content of a stream</p>
+      <p>It&apos;s an actual content of a stream</p>
       <h3>Content:</h3>
       <Tabs defaultValue="base64">
         <TabsList>
