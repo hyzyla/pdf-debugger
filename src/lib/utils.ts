@@ -21,6 +21,11 @@ export function fromByteArrayToHexString(bytes: Uint8Array): string {
     .join("");
 }
 
+export function frmoByteArrayToUnicode(bytes: Uint8Array): string {
+  const decoder = new TextDecoder();
+  return decoder.decode(bytes);
+}
+
 export function fromStringToBase64(str: string): string {
   const bytes = fromStringToByteArray(str);
   return fromByteArrayToBase64(bytes);

@@ -6,6 +6,7 @@ import { CSSProperties, use, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MdClose, MdCopyAll, MdExpand } from "react-icons/md";
 import {
+  frmoByteArrayToUnicode,
   fromByteArrayToBase64,
   fromByteArrayToHexString,
   fromStringToBase64,
@@ -181,7 +182,12 @@ function StreamContentDetail({ node }: DetailProps<StreamContent>) {
   const stream = node.obj.stream;
   stream.reset();
 
-  const bytes = stream.getBytes();
+  let bytes = stream.getBytes();
+  if (stream.constructor.name === "JpegStream") {
+    // @ts-ignore
+    bytes = stream.bytes;
+  }
+
   return (
     <>
       <h1>Stream Content</h1>
@@ -191,12 +197,16 @@ function StreamContentDetail({ node }: DetailProps<StreamContent>) {
         <TabsList>
           <TabsTrigger value="base64">Base64</TabsTrigger>
           <TabsTrigger value="hex">Hex</TabsTrigger>
+          <TabsTrigger value="unicode">Unicode</TabsTrigger>
         </TabsList>
         <TabsContent value="base64">
           <CodeBlock code={fromByteArrayToBase64(bytes)} />
         </TabsContent>
         <TabsContent value="hex">
           <CodeBlock code={fromByteArrayToHexString(bytes)} />
+        </TabsContent>
+        <TabsContent value="unicode">
+          <CodeBlock code={frmoByteArrayToUnicode(bytes)} />
         </TabsContent>
       </Tabs>
     </>
