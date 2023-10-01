@@ -1,4 +1,5 @@
 import { TreeNode } from "@/lib/pdf-walker";
+import { usePDFDebuggerStore } from "@/state";
 import * as core from "@hyzyla/pdfjs-core";
 import classNames from "classnames";
 import { useState } from "react";
@@ -61,8 +62,9 @@ export function PDFTreeRow(props: {
   selected: TreeNode | null;
   onClick: (node: TreeNode) => void;
 }) {
+  const expandLevel = usePDFDebuggerStore((state) => state.expandLevel());
   const node = props.node;
-  const [expanded, setExpanded] = useState(node.depth < 4);
+  const [expanded, setExpanded] = useState(node.depth < expandLevel);
 
   const onClick = () => {
     setExpanded(!expanded);

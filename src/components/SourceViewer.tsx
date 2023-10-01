@@ -133,7 +133,12 @@ export function SourceViewer() {
     const bytes = await blob.arrayBuffer();
     const pdfBytes = new Uint8Array(bytes);
     const pdf = loadPDFDocument(pdfBytes);
-    store.onPDFLoad(pdfBytes, blob.name, pdf);
+    store.onPDFLoad({
+      pdfBytes: pdfBytes,
+      pdfName: blob.name,
+      pdfDocument: pdf,
+      isExample: false,
+    });
   };
 
   const onPDFDrop = (file: Blob) => {
@@ -149,7 +154,12 @@ export function SourceViewer() {
     store.onExampleClick();
     const pdfBytes = await loadPdfExample();
     const pdf = loadPDFDocument(pdfBytes);
-    store.onPDFLoad(pdfBytes, "example.pdf", pdf);
+    store.onPDFLoad({
+      pdfBytes: pdfBytes,
+      pdfName: "example.pdf",
+      pdfDocument: pdf,
+      isExample: true,
+    });
   };
 
   const onHeaderClick = () => {

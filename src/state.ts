@@ -20,6 +20,7 @@ interface PDFScreen extends BaseScreen {
   pdfName: string;
   pdfBytes: Uint8Array;
   pdfDocument: core.PDFDocument;
+  isExample: boolean;
 }
 
 type Screen = DropzoneScreen | LoadingScreen | PDFScreen;
@@ -27,15 +28,17 @@ type Screen = DropzoneScreen | LoadingScreen | PDFScreen;
 type PDFDebuggerStore = Screen & {
   onPDFDrop: (blob: Blob) => void;
   onExampleClick: () => void;
-  onPDFLoad: (
-    pdfBytes: Uint8Array,
-    pdfName: string,
-    pdfDocument: core.PDFDocument
-  ) => void;
+  onPDFLoad: (options: {
+    pdfBytes: Uint8Array;
+    pdfName: string;
+    pdfDocument: core.PDFDocument;
+    isExample: boolean;
+  }) => void;
   reset: () => void;
+  expandLevel: () => number;
 };
 
-export const usePDFDebuggerStore = create<PDFDebuggerStore>()((set) => ({
+export const usePDFDebuggerStore = create<PDFDebuggerStore>()((set, get) => ({
   screen: "dropzone",
   onPDFDrop: (blob) => {
     set({
@@ -51,17 +54,22 @@ export const usePDFDebuggerStore = create<PDFDebuggerStore>()((set) => ({
       pdfName: "example.pdf",
     });
   },
-  onPDFLoad: (pdfBytes, pdfName, pdfDocument) => {
+  onPDFLoad: (options) => {
     set({
       screen: "pdf",
-      pdfName: pdfName,
-      pdfBytes: pdfBytes,
-      pdfDocument: pdfDocument,
+      pdfName: options.pdfName,
+      pdfBytes: options.pdfBytes,
+      pdfDocument: options.pdfDocument,
+      isExample: options.isExample,
     });
   },
   reset: () => {
     set({
       screen: "dropzone",
     });
+  },
+  expandLevel: () => {
+    const state = get();
+    return state.screen === "pdf" && state.isExample ? 6 : 4;
   },
 }));
