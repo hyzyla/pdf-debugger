@@ -102,6 +102,12 @@ function DictDetail({ node }: DetailProps<core.Dict>) {
       </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
+      {node.index !== undefined && (
+        <>
+          <h3>Index:</h3>
+          <pre>{node.index}</pre>
+        </>
+      )}
       <h3>Keys:</h3>
       <ul>
         {node.obj.getKeys().map((key) => (
@@ -110,6 +116,8 @@ function DictDetail({ node }: DetailProps<core.Dict>) {
           </li>
         ))}
       </ul>
+      <h3>Path:</h3>
+      <pre>{node.path}</pre>
     </>
   );
 }
@@ -125,8 +133,16 @@ function ArrayDetail({ node }: DetailProps<any[]>) {
       </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
+      {node.index !== undefined && (
+        <>
+          <h3>Index:</h3>
+          <pre>{node.index}</pre>
+        </>
+      )}
       <h3>Length:</h3>
       <pre>{node.obj.length}</pre>
+      <h3>Path:</h3>
+      <pre>{node.path}</pre>
     </>
   );
 }
@@ -143,8 +159,16 @@ function RefDetail({ node }: DetailProps<core.Ref>) {
       </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
+      {node.index !== undefined && (
+        <>
+          <h3>Index:</h3>
+          <pre>{node.index}</pre>
+        </>
+      )}
       <h3>Value:</h3>
       <pre>{ref}</pre>
+      <h3>Path:</h3>
+      <pre>{node.path}</pre>
     </>
   );
 }
@@ -160,6 +184,12 @@ function StreamDetail({ node }: DetailProps<core.BaseStream>) {
       </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
+      {node.index !== undefined && (
+        <>
+          <h3>Index:</h3>
+          <pre>{node.index}</pre>
+        </>
+      )}
       <h3>Metadata</h3>
       <ul>
         {node.children.map((child) => {
@@ -174,6 +204,8 @@ function StreamDetail({ node }: DetailProps<core.BaseStream>) {
           );
         })}
       </ul>
+      <h3>Path:</h3>
+      <pre>{node.path}</pre>
     </>
   );
 }
@@ -192,6 +224,12 @@ function StreamContentDetail({ node }: DetailProps<StreamContent>) {
     <>
       <h1>Stream Content</h1>
       <p>It&apos;s an actual content of a stream</p>
+      {node.index !== undefined && (
+        <>
+          <h3>Index:</h3>
+          <pre>{node.index}</pre>
+        </>
+      )}
       <h3>Content:</h3>
       <Tabs defaultValue="base64">
         <TabsList>
@@ -209,6 +247,8 @@ function StreamContentDetail({ node }: DetailProps<StreamContent>) {
           <CodeBlock code={frmoByteArrayToUnicode(bytes)} />
         </TabsContent>
       </Tabs>
+      <h3>Path:</h3>
+      <pre>{node.path}</pre>
     </>
   );
 }
@@ -223,8 +263,16 @@ function NameDetail({ node }: DetailProps<core.Name>) {
       <p>A identifier that begins with a / (e.g., /Name).</p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
+      {node.index !== undefined && (
+        <>
+          <h3>Index:</h3>
+          <pre>{node.index}</pre>
+        </>
+      )}
       <h3>Value:</h3>
       <pre>{node.obj.name.replace(/^\//, "")}</pre>
+      <h3>Path:</h3>
+      <pre>{node.path}</pre>
     </>
   );
 }
@@ -241,8 +289,16 @@ function NumberDetail({ node }: DetailProps<number>) {
       </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
+      {node.index !== undefined && (
+        <>
+          <h3>Index:</h3>
+          <pre>{node.index}</pre>
+        </>
+      )}
       <h3>Value:</h3>
       <pre>{node.obj.toString()}</pre>
+      <h3>Path:</h3>
+      <pre>{node.path}</pre>
     </>
   );
 }
@@ -268,6 +324,12 @@ function StringDetail({ node }: DetailProps<string>) {
       </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
+      {node.index !== undefined && (
+        <>
+          <h3>Index:</h3>
+          <pre>{node.index}</pre>
+        </>
+      )}
       <h3>Value:</h3>
       <Tabs defaultValue="unicode">
         <TabsList>
@@ -285,6 +347,8 @@ function StringDetail({ node }: DetailProps<string>) {
           <CodeBlock code={fromStringToHexString(str)} />
         </TabsContent>
       </Tabs>
+      <h3>Path:</h3>
+      <pre>{node.path}</pre>
     </>
   );
 }
@@ -299,8 +363,16 @@ function BooleanDetail({ node }: DetailProps<boolean>) {
       <p>True or false values (true or false).</p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
+      {node.index !== undefined && (
+        <>
+          <h3>Index:</h3>
+          <pre>{node.index}</pre>
+        </>
+      )}
       <h3>Value:</h3>
       <pre>{node.obj.toString()}</pre>
+      <h3>Path:</h3>
+      <pre>{node.path}</pre>
     </>
   );
 }
@@ -313,8 +385,16 @@ function NullDetail({ node }: DetailProps<null>) {
       <p>A null object (null).</p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
+      {node.index !== undefined && (
+        <>
+          <h3>Index:</h3>
+          <pre>{node.index}</pre>
+        </>
+      )}
       <h3>Value:</h3>
       <pre>null</pre>
+      <h3>Path:</h3>
+      <pre>{node.path}</pre>
     </>
   );
 }
