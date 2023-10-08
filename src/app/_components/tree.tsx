@@ -4,8 +4,8 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 
 import { PDFTreeRowDetails } from "@/app/_components/tree-details";
 import { TreeRow } from "@/app/_components/tree-row";
-import { buttonVariants } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { buttonVariants } from "@/components/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/dialog";
 import { PDFWalker, TreeNode } from "@/lib/pdf-walker";
 import { useMediaQuery } from "@/lib/use-media-query-hook";
 import { cn } from "@/lib/utils";

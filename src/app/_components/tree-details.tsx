@@ -2,8 +2,8 @@ import * as core from "@hyzyla/pdfjs-core";
 import { CSSProperties, useState } from "react";
 import { MdCopyAll, MdExpand } from "react-icons/md";
 
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/tabs";
 import { StreamContent, TreeNode } from "@/lib/pdf-walker";
 import {
   frmoByteArrayToUnicode,

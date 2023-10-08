@@ -3,7 +3,7 @@ import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import { BiShow, BiSolidHeart } from "react-icons/bi";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button";
 import { cn } from "@/lib/utils";
 
 export function InterestButton() {
@@ -18,10 +18,7 @@ export function InterestButton() {
       onClick={onInterestClick}
       variant="secondary"
       size="sm"
-      className={cn(
-        "flex flex-row items-center gap-2",
-        isClicked && "text-green-700 border-green-700 border"
-      )}
+      className={cn("flex flex-row items-center gap-2", isClicked && "text-green-700 border-green-700 border")}
     >
       {isClicked ? <BiSolidHeart /> : <BiShow />}
       {isClicked ? "Thank you!" : "Show interest"}
