@@ -1,9 +1,10 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import { BiShow, BiSolidHeart } from "react-icons/bi";
+
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function InterestButton() {
   const posthog = usePostHog();

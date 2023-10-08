@@ -1,9 +1,9 @@
-import { PDFSourceViewer } from "@/components/PDFSourceViewer";
+import { SourceViewer } from "@/app/_components/root";
 
 export default function Home() {
   return (
     <>
-      <PDFSourceViewer />
+      <SourceViewer />
     </>
   );
 }

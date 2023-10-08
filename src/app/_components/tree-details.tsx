@@ -1,10 +1,10 @@
-import { StreamContent, TreeNode } from "@/lib/pdf-walker";
 import * as core from "@hyzyla/pdfjs-core";
-import { Stream } from "stream";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CSSProperties, use, useRef, useState } from "react";
+import { CSSProperties, useState } from "react";
+import { MdCopyAll, MdExpand } from "react-icons/md";
+
 import { Button } from "@/components/ui/button";
-import { MdClose, MdCopyAll, MdExpand } from "react-icons/md";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { StreamContent, TreeNode } from "@/lib/pdf-walker";
 import {
   frmoByteArrayToUnicode,
   fromByteArrayToBase64,
@@ -31,25 +31,13 @@ const CodeBlock = (props: { code: string }) => {
     navigator.clipboard.writeText(props.code);
     // make button green for 1s
     const target = e.currentTarget;
-    target.classList.add(
-      "border-green-200",
-      "text-green-700",
-      "hover:border-green-200",
-      "hover:text-green-700"
-    );
+    target.classList.add("border-green-200", "text-green-700", "hover:border-green-200", "hover:text-green-700");
     setTimeout(() => {
-      target.classList.remove(
-        "border-green-200",
-        "text-green-700",
-        "hover:border-green-200",
-        "hover:text-green-700"
-      );
+      target.classList.remove("border-green-200", "text-green-700", "hover:border-green-200", "hover:text-green-700");
     }, 1000);
   };
 
-  const blockStyle: CSSProperties = isExpanded
-    ? { maxHeight: "none" }
-    : { maxHeight: "400px", overflowY: "auto" };
+  const blockStyle: CSSProperties = isExpanded ? { maxHeight: "none" } : { maxHeight: "400px", overflowY: "auto" };
 
   return (
     <div className="flex flex-col" style={blockStyle}>
@@ -62,21 +50,11 @@ const CodeBlock = (props: { code: string }) => {
         {props.code}
       </pre>
       <div className="flex gap-2 self-end">
-        <Button
-          onClick={onCopy}
-          variant="outline"
-          size="sm"
-          className="transition-all gap-1"
-        >
+        <Button onClick={onCopy} variant="outline" size="sm" className="transition-all gap-1">
           <MdCopyAll />
           Copy
         </Button>
-        <Button
-          onClick={() => setExpanded(!isExpanded)}
-          variant="outline"
-          size="sm"
-          className="gap-1"
-        >
+        <Button onClick={() => setExpanded(!isExpanded)} variant="outline" size="sm" className="gap-1">
           <MdExpand />
 
           {isExpanded ? "Collapse" : "Expand"}
@@ -97,8 +75,8 @@ function DictDetail({ node }: DetailProps<core.Dict>) {
     <>
       <h1>Dictionary</h1>
       <p>
-        Collections of key-value pairs, enclosed in double angle brackets (e.g.,
-        &lt;&lt; /Type /Example /Subtype /Type1 &gt;&gt;).
+        Collections of key-value pairs, enclosed in double angle brackets (e.g., &lt;&lt; /Type /Example /Subtype /Type1
+        &gt;&gt;).
       </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
@@ -127,10 +105,7 @@ function ArrayDetail({ node }: DetailProps<any[]>) {
   return (
     <>
       <h1>Array</h1>
-      <p>
-        Ordered collections of objects, enclosed in square brackets (e.g., [1 2
-        3]).
-      </p>
+      <p>Ordered collections of objects, enclosed in square brackets (e.g., [1 2 3]).</p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
       {node.index !== undefined && (
@@ -153,10 +128,7 @@ function RefDetail({ node }: DetailProps<core.Ref>) {
   return (
     <>
       <h1>Reference</h1>
-      <p>
-        It&apos;s a reference to an indirect object in the PDF file (like a
-        link)
-      </p>
+      <p>It&apos;s a reference to an indirect object in the PDF file (like a link)</p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
       {node.index !== undefined && (
@@ -178,10 +150,7 @@ function StreamDetail({ node }: DetailProps<core.BaseStream>) {
   return (
     <>
       <h1>Stream</h1>
-      <p>
-        A sequence of bytes, usually associated with a dictionary that describes
-        its properties.
-      </p>
+      <p>A sequence of bytes, usually associated with a dictionary that describes its properties.</p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
       {node.index !== undefined && (
@@ -254,9 +223,7 @@ function StreamContentDetail({ node }: DetailProps<StreamContent>) {
 }
 
 function NameDetail({ node }: DetailProps<core.Name>) {
-  const syntax = node.name
-    ? `/${node.name} /${node.obj.name}`
-    : `[... /${node.obj.name} ...]`;
+  const syntax = node.name ? `/${node.name} /${node.obj.name}` : `[... /${node.obj.name} ...]`;
   return (
     <>
       <h1>Name</h1>
@@ -278,15 +245,11 @@ function NameDetail({ node }: DetailProps<core.Name>) {
 }
 
 function NumberDetail({ node }: DetailProps<number>) {
-  const syntax = node.name
-    ? `/${node.name} ${node.obj}`
-    : `[... ${node.obj} ...]`;
+  const syntax = node.name ? `/${node.name} ${node.obj}` : `[... ${node.obj} ...]`;
   return (
     <>
       <h1>Number</h1>
-      <p>
-        Integer numbers (e.g., 123) or floating-point numbers (e.g., 3.141).
-      </p>
+      <p>Integer numbers (e.g., 123) or floating-point numbers (e.g., 3.141).</p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
       {node.index !== undefined && (
@@ -311,17 +274,13 @@ function StringDetail({ node }: DetailProps<string>) {
   }
   strExample = strExample.replace(/([()\\])/g, "\\$1");
 
-  const syntax = node.name
-    ? `/${node.name} (${strExample})`
-    : `[... (${strExample}) ...]`;
+  const syntax = node.name ? `/${node.name} (${strExample})` : `[... (${strExample}) ...]`;
 
   // TODO: escape string
   return (
     <>
       <h1>String</h1>
-      <p>
-        Sequences of characters, enclosed in parentheses (e.g., (Hello, World)).
-      </p>
+      <p>Sequences of characters, enclosed in parentheses (e.g., (Hello, World)).</p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
       {node.index !== undefined && (
@@ -354,9 +313,7 @@ function StringDetail({ node }: DetailProps<string>) {
 }
 
 function BooleanDetail({ node }: DetailProps<boolean>) {
-  const syntax = node.name
-    ? `/${node.name} ${node.obj}`
-    : `[... ${node.obj} ...]`;
+  const syntax = node.name ? `/${node.name} ${node.obj}` : `[... ${node.obj} ...]`;
   return (
     <>
       <h1>Boolean</h1>
@@ -428,8 +385,6 @@ export function PDFTreeRowDetails(props: { node: TreeNode }) {
   };
   return (
     // break words in pre
-    <div className="p-2 prose prose-pre:whitespace-pre-wrap prose-pre:break-words">
-      {getDtails()}
-    </div>
+    <div className="p-2 prose prose-pre:whitespace-pre-wrap prose-pre:break-words">{getDtails()}</div>
   );
 }

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import * as core from "@hyzyla/pdfjs-core";
 
 export function loadPDFDocument(pdfBytes: Uint8Array): core.PDFDocument {

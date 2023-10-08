@@ -1,5 +1,3 @@
-import { TreeNode } from "@/lib/pdf-walker";
-import { usePDFDebuggerStore } from "@/state";
 import * as core from "@hyzyla/pdfjs-core";
 import classNames from "classnames";
 import { useState } from "react";
@@ -8,16 +6,13 @@ import { BsTextIndentRight } from "react-icons/bs";
 import { MdChevronRight, MdExpandMore } from "react-icons/md";
 import { PiBracketsCurlyBold, PiBracketsSquareBold } from "react-icons/pi";
 import { RiIndeterminateCircleLine } from "react-icons/ri";
-import {
-  TbArrowsSplit2,
-  TbBinary,
-  TbExternalLink,
-  TbFileUnknown,
-  TbSquareLetterF,
-} from "react-icons/tb";
+import { TbArrowsSplit2, TbBinary, TbExternalLink, TbFileUnknown, TbSquareLetterF } from "react-icons/tb";
 import { VscFileBinary } from "react-icons/vsc";
 
-function PDFTreeLine(props: {
+import { TreeNode } from "@/lib/pdf-walker";
+import { usePDFDebuggerStore } from "@/state";
+
+function TreeLine(props: {
   icon: React.ComponentType<any>;
   iconColor: string;
   name?: string;
@@ -47,9 +42,7 @@ function PDFTreeLine(props: {
     <>
       <div className="flex items-center gap-1 h-[24px]">
         {getExpandIcon()}
-        <props.icon
-          className={`${props.iconColor} min-w-[16px] min-h-[16px]`}
-        />
+        <props.icon className={`${props.iconColor} min-w-[16px] min-h-[16px]`} />
         {props.name && <span>{props.name}:</span>}
       </div>
       {props.value && <span className="text-gray-500">{props.value}</span>}
@@ -57,11 +50,7 @@ function PDFTreeLine(props: {
   );
 }
 
-export function PDFTreeRow(props: {
-  node: TreeNode;
-  selected: TreeNode | null;
-  onClick: (node: TreeNode) => void;
-}) {
+export function TreeRow(props: { node: TreeNode; selected: TreeNode | null; onClick: (node: TreeNode) => void }) {
   const expandLevel = usePDFDebuggerStore((state) => state.expandLevel());
   const node = props.node;
   const [expanded, setExpanded] = useState(node.depth < expandLevel);
@@ -79,9 +68,7 @@ export function PDFTreeRow(props: {
   const onRefClick = (e: React.MouseEvent, node: TreeNode<core.Ref>) => {
     e.stopPropagation();
 
-    const element = document.getElementById(
-      `ref-${node.obj.num}-${node.obj.gen}`
-    );
+    const element = document.getElementById(`ref-${node.obj.num}-${node.obj.gen}`);
     if (!element) return;
 
     element.scrollIntoView();
@@ -99,7 +86,7 @@ export function PDFTreeRow(props: {
     // const isParentArray = node.parent && isArray(node.parent.obj);
     if (node.isDict()) {
       return (
-        <PDFTreeLine
+        <TreeLine
           icon={PiBracketsCurlyBold}
           iconColor="text-green-600"
           name={node.name}
@@ -110,7 +97,7 @@ export function PDFTreeRow(props: {
       );
     } else if (node.isArray()) {
       return (
-        <PDFTreeLine
+        <TreeLine
           icon={PiBracketsSquareBold}
           iconColor="text-purple-600"
           name={node.name}
@@ -121,15 +108,12 @@ export function PDFTreeRow(props: {
       );
     } else if (node.isRef()) {
       return (
-        <PDFTreeLine
+        <TreeLine
           icon={TbExternalLink}
           iconColor="text-magenta-600"
           name={node.name}
           value={
-            <div
-              onClick={(e) => onRefClick(e, node)}
-              className="hover:bg-gray-300 rounded"
-            >
+            <div onClick={(e) => onRefClick(e, node)} className="hover:bg-gray-300 rounded">
               ref(num={node.obj.num}, gen={node.obj.gen})
             </div>
           }
@@ -140,7 +124,7 @@ export function PDFTreeRow(props: {
       );
     } else if (node.isStream()) {
       return (
-        <PDFTreeLine
+        <TreeLine
           icon={VscFileBinary}
           iconColor="text-fuchsia-600"
           name={node.name}
@@ -151,7 +135,7 @@ export function PDFTreeRow(props: {
       );
     } else if (node.isStreamContent()) {
       return (
-        <PDFTreeLine
+        <TreeLine
           icon={TbBinary}
           iconColor="text-gray-500"
           name={node.name}
@@ -163,7 +147,7 @@ export function PDFTreeRow(props: {
       );
     } else if (node.isName()) {
       return (
-        <PDFTreeLine
+        <TreeLine
           icon={TbSquareLetterF}
           iconColor="text-yellow-600"
           name={node.name}
@@ -175,7 +159,7 @@ export function PDFTreeRow(props: {
       );
     } else if (node.isNumber()) {
       return (
-        <PDFTreeLine
+        <TreeLine
           icon={AiOutlineNumber}
           iconColor="text-blue-600"
           name={node.name}
@@ -187,7 +171,7 @@ export function PDFTreeRow(props: {
       );
     } else if (node.isString()) {
       return (
-        <PDFTreeLine
+        <TreeLine
           icon={BsTextIndentRight}
           iconColor="text-red-600"
           name={node.name}
@@ -199,7 +183,7 @@ export function PDFTreeRow(props: {
       );
     } else if (node.isBoolean()) {
       return (
-        <PDFTreeLine
+        <TreeLine
           icon={TbArrowsSplit2}
           iconColor="text-green-600"
           name={node.name}
@@ -211,7 +195,7 @@ export function PDFTreeRow(props: {
       );
     } else if (node.isNull()) {
       return (
-        <PDFTreeLine
+        <TreeLine
           icon={RiIndeterminateCircleLine}
           iconColor="text-gray-500"
           name={node.name}
@@ -223,7 +207,7 @@ export function PDFTreeRow(props: {
       );
     } else {
       return (
-        <PDFTreeLine
+        <TreeLine
           icon={TbFileUnknown}
           iconColor="text-gray-500"
           name={node.name}
@@ -258,11 +242,7 @@ export function PDFTreeRow(props: {
         <ul className="ml-6">
           {node.children.map((child) => (
             <li key={child.uniqueId}>
-              <PDFTreeRow
-                node={child}
-                onClick={props.onClick}
-                selected={props.selected}
-              />
+              <TreeRow node={child} onClick={props.onClick} selected={props.selected} />
             </li>
           ))}
         </ul>

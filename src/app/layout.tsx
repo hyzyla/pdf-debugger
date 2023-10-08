@@ -1,8 +1,10 @@
-import { AppPostHogProvider, PostHogPageview } from "@/app/providers";
 import "./globals.css";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Suspense } from "react";
+
+import { AppPostHogProvider, PostHogPageview } from "@/app/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 

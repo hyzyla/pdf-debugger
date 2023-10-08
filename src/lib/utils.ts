@@ -1,6 +1,6 @@
+import * as base64 from "base64-js";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import * as base64 from "base64-js";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

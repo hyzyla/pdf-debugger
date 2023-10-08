@@ -1,5 +1,5 @@
-import { create } from "zustand";
 import * as core from "@hyzyla/pdfjs-core";
+import { create } from "zustand";
 
 interface BaseScreen {
   screen: string;

@@ -1,14 +1,15 @@
 "use client";
-import { Footer } from "@/components/Foother";
-import { Header } from "@/components/Header";
-import { PDFDropzoneScreen } from "@/components/PDFDropzoneScreen";
-import { PDFViewerScreen } from "@/components/PDFViwerScreen";
+import { usePostHog } from "posthog-js/react";
+
+import { DropzoneScreen } from "@/app/_components/dropzone-screen";
+import { Footer } from "@/app/_components/footer";
+import { Header } from "@/app/_components/header";
+import { ViewerScreen } from "@/app/_components/viwer-screen";
 import { loadPdfExample } from "@/lib/load-pdf-example";
 import { loadPDFDocument } from "@/lib/load-pdf-hook";
 import { usePDFDebuggerStore } from "@/state";
-import { usePostHog } from "posthog-js/react";
 
-export function PDFSourceViewer() {
+export function SourceViewer() {
   const store = usePDFDebuggerStore();
   const posthog = usePostHog();
 
@@ -53,16 +54,9 @@ export function PDFSourceViewer() {
     <main className="p-3 gap-3 flex flex-col h-[100dvh] max-h-[100dvh]">
       <Header onClick={onHeaderClick} />
       <div className="flex-1 flex overflow-hidden">
-        {store.screen === "dropzone" && (
-          <PDFDropzoneScreen onDrop={onPDFDrop} onExample={onExamplePDFDrop} />
-        )}
+        {store.screen === "dropzone" && <DropzoneScreen onDrop={onPDFDrop} onExample={onExamplePDFDrop} />}
         {store.screen === "loading" && <div>Loading...</div>}
-        {store.screen === "pdf" && (
-          <PDFViewerScreen
-            pdfDocument={store.pdfDocument}
-            pdfName={store.pdfName}
-          />
-        )}
+        {store.screen === "pdf" && <ViewerScreen pdfDocument={store.pdfDocument} pdfName={store.pdfName} />}
       </div>
       <Footer />
     </main>
