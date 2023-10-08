@@ -13,6 +13,7 @@ export function InterestButton() {
     setIsClicked(true);
     posthog.capture("interest_button_clicked");
   };
+
   return (
     <Button
       onClick={onInterestClick}

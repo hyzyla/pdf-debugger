@@ -4,7 +4,7 @@ import { usePostHog } from "posthog-js/react";
 import { DropzoneScreen } from "@/app/_components/dropzone-screen";
 import { Footer } from "@/app/_components/footer";
 import { Header } from "@/app/_components/header";
-import { ViewerScreen } from "@/app/_components/viwer-screen";
+import { TreeScreen } from "@/app/_components/tree-screen";
 import { loadPdfExample } from "@/lib/load-pdf-example";
 import { loadPDFDocument } from "@/lib/load-pdf-hook";
 import { usePDFDebuggerStore } from "@/state";
@@ -56,7 +56,7 @@ export function SourceViewer() {
       <div className="flex-1 flex overflow-hidden">
         {store.screen === "dropzone" && <DropzoneScreen onDrop={onPDFDrop} onExample={onExamplePDFDrop} />}
         {store.screen === "loading" && <div>Loading...</div>}
-        {store.screen === "pdf" && <ViewerScreen pdfDocument={store.pdfDocument} pdfName={store.pdfName} />}
+        {store.screen === "pdf" && <TreeScreen pdf={store.pdfDocument} name={store.pdfName} />}
       </div>
       <Footer />
     </main>
