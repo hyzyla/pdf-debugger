@@ -4,7 +4,13 @@ import { BsTextIndentRight } from "react-icons/bs";
 import { MdChevronRight, MdExpandMore } from "react-icons/md";
 import { PiBracketsCurlyBold, PiBracketsSquareBold } from "react-icons/pi";
 import { RiIndeterminateCircleLine } from "react-icons/ri";
-import { TbArrowsSplit2, TbBinary, TbExternalLink, TbFileUnknown, TbSquareLetterF } from "react-icons/tb";
+import {
+  TbArrowsSplit2,
+  TbBinary,
+  TbExternalLink,
+  TbFileUnknown,
+  TbSquareLetterF,
+} from "react-icons/tb";
 import { VscFileBinary } from "react-icons/vsc";
 
 import { TreeNode } from "@/lib/pdf-walker";
@@ -39,7 +45,9 @@ function TreeRowBase(props: {
     <>
       <div className="flex items-center gap-1 h-[24px]">
         {getExpandIcon()}
-        <props.icon className={`${props.iconColor} min-w-[16px] min-h-[16px]`} />
+        <props.icon
+          className={`${props.iconColor} min-w-[16px] min-h-[16px]`}
+        />
         {props.name && <span>{props.name}:</span>}
       </div>
       {props.value && <span className="text-gray-500">{props.value}</span>}
@@ -83,7 +91,10 @@ export function TreeRow(props: {
         iconColor="text-magenta-600"
         name={node.name}
         value={
-          <div onClick={(e) => onRefClick(e, node)} className="hover:bg-gray-300 rounded">
+          <div
+            onClick={(e) => onRefClick(e, node)}
+            className="hover:bg-gray-300 rounded"
+          >
             ref(num={node.obj.num}, gen={node.obj.gen})
           </div>
         }

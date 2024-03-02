@@ -11,13 +11,17 @@ export function StringDetails({ node }: DetailProps<string>) {
   }
   strExample = strExample.replace(/([()\\])/g, "\\$1");
 
-  const syntax = node.name ? `/${node.name} (${strExample})` : `[... (${strExample}) ...]`;
+  const syntax = node.name
+    ? `/${node.name} (${strExample})`
+    : `[... (${strExample}) ...]`;
 
   // TODO: escape string
   return (
     <>
       <h1>String</h1>
-      <p>Sequences of characters, enclosed in parentheses (e.g., (Hello, World)).</p>
+      <p>
+        Sequences of characters, enclosed in parentheses (e.g., (Hello, World)).
+      </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
       {node.index !== undefined && (

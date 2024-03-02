@@ -11,7 +11,7 @@ interface DropzoneScreen extends BaseScreen {
 
 interface LoadingScreen extends BaseScreen {
   screen: "loading";
-  pdfBlob: Blob;
+  pdfFile: Blob;
   pdfName: string;
 }
 
@@ -26,7 +26,7 @@ interface PDFScreen extends BaseScreen {
 type Screen = DropzoneScreen | LoadingScreen | PDFScreen;
 
 type PDFDebuggerStore = Screen & {
-  onPDFDrop: (blob: Blob) => void;
+  onPDFDrop: (blob: File) => void;
   onExampleClick: () => void;
   onPDFLoad: (options: {
     pdfBytes: Uint8Array;
@@ -40,17 +40,17 @@ type PDFDebuggerStore = Screen & {
 
 export const usePDFDebuggerStore = create<PDFDebuggerStore>()((set, get) => ({
   screen: "dropzone",
-  onPDFDrop: (blob) => {
+  onPDFDrop: (file) => {
     set({
       screen: "loading",
-      pdfBlob: blob,
-      pdfName: blob.name,
+      pdfFile: file,
+      pdfName: file.name,
     });
   },
   onExampleClick: () => {
     set({
       screen: "loading",
-      pdfBlob: new Blob(),
+      pdfFile: new Blob(),
       pdfName: "example.pdf",
     });
   },

@@ -1,7 +1,9 @@
 import { DetailProps } from "@/app/_components/tree/tree-details/_types";
 
 export function BooleanDetails({ node }: DetailProps<boolean>) {
-  const syntax = node.name ? `/${node.name} ${node.obj}` : `[... ${node.obj} ...]`;
+  const syntax = node.name
+    ? `/${node.name} ${node.obj}`
+    : `[... ${node.obj} ...]`;
   return (
     <>
       <h1>Boolean</h1>

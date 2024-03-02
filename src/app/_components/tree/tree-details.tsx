@@ -39,6 +39,8 @@ export function TreeNodeDetails(props: { node: TreeNode }) {
   };
   return (
     // break words in pre
-    <div className="p-2 prose prose-pre:whitespace-pre-wrap prose-pre:break-words">{getDtails()}</div>
+    <div className="p-2 prose prose-pre:whitespace-pre-wrap prose-pre:break-words">
+      {getDtails()}
+    </div>
   );
 }

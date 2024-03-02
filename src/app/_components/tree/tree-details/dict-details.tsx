@@ -13,8 +13,8 @@ export function DictDetails({ node }: DetailProps<core.Dict>) {
     <>
       <h1>Dictionary</h1>
       <p>
-        Collections of key-value pairs, enclosed in double angle brackets (e.g., &lt;&lt; /Type /Example /Subtype /Type1
-        &gt;&gt;).
+        Collections of key-value pairs, enclosed in double angle brackets (e.g.,
+        &lt;&lt; /Type /Example /Subtype /Type1 &gt;&gt;).
       </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>

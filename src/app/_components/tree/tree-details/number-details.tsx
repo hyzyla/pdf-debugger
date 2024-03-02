@@ -1,11 +1,15 @@
 import { DetailProps } from "@/app/_components/tree/tree-details/_types";
 
 export function NumberDetails({ node }: DetailProps<number>) {
-  const syntax = node.name ? `/${node.name} ${node.obj}` : `[... ${node.obj} ...]`;
+  const syntax = node.name
+    ? `/${node.name} ${node.obj}`
+    : `[... ${node.obj} ...]`;
   return (
     <>
       <h1>Number</h1>
-      <p>Integer numbers (e.g., 123) or floating-point numbers (e.g., 3.141).</p>
+      <p>
+        Integer numbers (e.g., 123) or floating-point numbers (e.g., 3.141).
+      </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
       {node.index !== undefined && (

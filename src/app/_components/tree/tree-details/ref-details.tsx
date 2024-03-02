@@ -8,7 +8,10 @@ export function RefDetails({ node }: DetailProps<core.Ref>) {
   return (
     <>
       <h1>Reference</h1>
-      <p>It&apos;s a reference to an indirect object in the PDF file (like a link)</p>
+      <p>
+        It&apos;s a reference to an indirect object in the PDF file (like a
+        link)
+      </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
       {node.index !== undefined && (

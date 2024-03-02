@@ -18,16 +18,28 @@ export function TreeScreenMobile(props: {
   return (
     <div className="flex-1 flex overflow-hidden flex-col">
       <div className="overflow-y-auto flex-1 p-2">
-        <TreeNote node={props.root} onClick={props.onRowClick} selected={props.selected} />
+        <TreeNote
+          node={props.root}
+          onClick={props.onRowClick}
+          selected={props.selected}
+        />
       </div>
       {props.selected && (
         <>
           <Dialog modal={true}>
-            <DialogTrigger className={cn(buttonVariants({ variant: "default", size: "default" }))}>
+            <DialogTrigger
+              className={cn(
+                buttonVariants({ variant: "default", size: "default" }),
+              )}
+            >
               <MdKeyboardArrowDown className="mr-2" />
               Show details
             </DialogTrigger>
-            <DialogContent className={"lg:max-w-screen-lg overflow-y-scroll max-h-[100dvh] min-h-[100dvh]"}>
+            <DialogContent
+              className={
+                "lg:max-w-screen-lg overflow-y-scroll max-h-[100dvh] min-h-[100dvh]"
+              }
+            >
               <TreeNodeDetails node={props.selected} />
             </DialogContent>
           </Dialog>

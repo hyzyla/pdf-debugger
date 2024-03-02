@@ -5,7 +5,11 @@ import { Button } from "@/components/button";
 import { CodeBlock } from "@/components/code-block";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/tabs";
 import { StreamContent } from "@/lib/pdf-walker";
-import { frmoByteArrayToUnicode, fromByteArrayToBase64, fromByteArrayToHexString } from "@/lib/utils";
+import {
+  frmoByteArrayToUnicode,
+  fromByteArrayToBase64,
+  fromByteArrayToHexString,
+} from "@/lib/utils";
 
 function TrueTypeContext({ node }: DetailProps<StreamContent>) {
   const onDownloadClick = () => {
@@ -24,8 +28,9 @@ function TrueTypeContext({ node }: DetailProps<StreamContent>) {
     <>
       <h3>Context</h3>
       <p>
-        It&apos;s a TrueType font file. Currently, we don&apos;t support rendering content of TrueType font files. You
-        can download it and open it in your favorite font editor.
+        It&apos;s a TrueType font file. Currently, we don&apos;t support
+        rendering content of TrueType font files. You can download it and open
+        it in your favorite font editor.
       </p>
       <Button onClick={onDownloadClick} className="flex flex-row gap-2">
         <MdFileDownload />
@@ -40,7 +45,6 @@ function TrueTypeContext({ node }: DetailProps<StreamContent>) {
  * like showing a font file or image
  */
 function Context({ node }: DetailProps<StreamContent>) {
-  
   const path = node.path;
   if (path.endsWith(".FontFile2.")) {
     return <TrueTypeContext node={node} />;

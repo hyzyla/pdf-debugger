@@ -172,7 +172,7 @@ export class TreeNode<T extends ObjType = ObjType> {
             depth,
             parent: this,
             walker: this.walker,
-          })
+          }),
         );
       }
     } else if (isArray(obj)) {
@@ -184,7 +184,7 @@ export class TreeNode<T extends ObjType = ObjType> {
             parent: this,
             index: index,
             walker: this.walker,
-          })
+          }),
         );
       }
     } else if (isStream(obj)) {
@@ -199,7 +199,7 @@ export class TreeNode<T extends ObjType = ObjType> {
             depth,
             parent: this,
             walker: this.walker,
-          })
+          }),
         );
       }
       children.push(
@@ -208,7 +208,7 @@ export class TreeNode<T extends ObjType = ObjType> {
           depth,
           parent: this,
           walker: this.walker,
-        })
+        }),
       );
     }
 

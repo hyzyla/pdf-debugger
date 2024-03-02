@@ -5,7 +5,10 @@ export function ArrayDetails({ node }: DetailProps<any[]>) {
   return (
     <>
       <h1>Array</h1>
-      <p>Ordered collections of objects, enclosed in square brackets (e.g., [1 2 3]).</p>
+      <p>
+        Ordered collections of objects, enclosed in square brackets (e.g., [1 2
+        3]).
+      </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
       {node.index !== undefined && (

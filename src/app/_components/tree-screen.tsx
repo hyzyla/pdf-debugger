@@ -8,7 +8,10 @@ import { PDFWalker, TreeNode } from "@/lib/pdf-walker";
 import { useMediaQuery } from "@/lib/use-media-query-hook";
 import { useResizer } from "@/lib/use-resizer-hook";
 
-export function TreeScreen(props: { pdf: core.PDFDocument; name: string | null }) {
+export function TreeScreen(props: {
+  pdf: core.PDFDocument;
+  name: string | null;
+}) {
   const [selected, setSelected] = useState<TreeNode | null>(null);
   const isSmScreen = useMediaQuery("(max-width: 640px)");
   const walker = new PDFWalker({ pdf: props.pdf });
@@ -26,7 +29,13 @@ export function TreeScreen(props: { pdf: core.PDFDocument; name: string | null }
 
   if (isSmScreen) {
     return (
-      <TreeScreenMobile pdf={props.pdf} name={props.name} root={root} selected={selected} onRowClick={onRowClick} />
+      <TreeScreenMobile
+        pdf={props.pdf}
+        name={props.name}
+        root={root}
+        selected={selected}
+        onRowClick={onRowClick}
+      />
     );
   }
 
@@ -35,8 +44,15 @@ export function TreeScreen(props: { pdf: core.PDFDocument; name: string | null }
       <div className="overflow-y-auto sm:w-1/3 flex-1 p-2">
         <TreeNote node={root} onClick={onRowClick} selected={selected} />
       </div>
-      <div className="min-w-[6px] cursor-col-resize border-l-2 border-gray-200" onMouseDown={startResizing} />
-      <div className="overflow-y-auto" ref={sidebarRef} style={{ width: sidebarWidth ?? "33%" }}>
+      <div
+        className="min-w-[6px] cursor-col-resize border-l-2 border-gray-200"
+        onMouseDown={startResizing}
+      />
+      <div
+        className="overflow-y-auto"
+        ref={sidebarRef}
+        style={{ width: sidebarWidth ?? "33%" }}
+      >
         {selected && <TreeNodeDetails node={selected} />}
       </div>
     </div>

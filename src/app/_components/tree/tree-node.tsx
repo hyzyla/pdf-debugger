@@ -6,7 +6,11 @@ import { TreeRow } from "@/app/_components/tree/tree-row";
 import { TreeNode } from "@/lib/pdf-walker";
 import { usePDFDebuggerStore } from "@/state";
 
-export function TreeNote(props: { node: TreeNode; selected: TreeNode | null; onClick: (node: TreeNode) => void }) {
+export function TreeNote(props: {
+  node: TreeNode;
+  selected: TreeNode | null;
+  onClick: (node: TreeNode) => void;
+}) {
   const node = props.node;
 
   const expandLevel = usePDFDebuggerStore((state) => state.expandLevel());
@@ -25,7 +29,9 @@ export function TreeNote(props: { node: TreeNode; selected: TreeNode | null; onC
   const onRefClick = (e: React.MouseEvent, node: TreeNode<core.Ref>) => {
     e.stopPropagation();
 
-    const element = document.getElementById(`ref-${node.obj.num}-${node.obj.gen}`);
+    const element = document.getElementById(
+      `ref-${node.obj.num}-${node.obj.gen}`,
+    );
     if (!element) return;
 
     element.scrollIntoView();
@@ -52,16 +58,25 @@ export function TreeNote(props: { node: TreeNode; selected: TreeNode | null; onC
           {
             "bg-gray-100": isSelected,
             "bg-opacity-100": isSelected,
-          }
+          },
         )}
       >
-        <TreeRow node={node} expanded={expanded} onExpandClick={onExpandClick} onRefClick={onRefClick} />
+        <TreeRow
+          node={node}
+          expanded={expanded}
+          onExpandClick={onExpandClick}
+          onRefClick={onRefClick}
+        />
       </div>
       {expanded && (
         <ul className="ml-6">
           {node.children.map((child) => (
             <li key={child.uniqueId}>
-              <TreeNote node={child} onClick={props.onClick} selected={props.selected} />
+              <TreeNote
+                node={child}
+                onClick={props.onClick}
+                selected={props.selected}
+              />
             </li>
           ))}
         </ul>

@@ -3,7 +3,9 @@ import * as core from "@hyzyla/pdfjs-core";
 import { DetailProps } from "@/app/_components/tree/tree-details/_types";
 
 export function NameDetail({ node }: DetailProps<core.Name>) {
-  const syntax = node.name ? `/${node.name} /${node.obj.name}` : `[... /${node.obj.name} ...]`;
+  const syntax = node.name
+    ? `/${node.name} /${node.obj.name}`
+    : `[... /${node.obj.name} ...]`;
   return (
     <>
       <h1>Name</h1>

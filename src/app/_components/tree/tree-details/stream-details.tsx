@@ -8,7 +8,10 @@ export function StreamDetails({ node }: DetailProps<core.BaseStream>) {
   return (
     <>
       <h1>Stream</h1>
-      <p>A sequence of bytes, usually associated with a dictionary that describes its properties.</p>
+      <p>
+        A sequence of bytes, usually associated with a dictionary that describes
+        its properties.
+      </p>
       <h3>PDF Syntax:</h3>
       <pre>{syntax}</pre>
       {node.index !== undefined && (

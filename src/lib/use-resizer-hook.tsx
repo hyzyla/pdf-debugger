@@ -31,7 +31,7 @@ export function useResizer() {
         setSidebarWidth(sidebarWidth ? sidebarWidth + widthDiff : null);
       }
     },
-    [isResizing]
+    [isResizing],
   );
 
   useEffect(() => {
