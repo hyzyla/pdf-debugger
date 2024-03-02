@@ -35,7 +35,12 @@ function TrueTypeContext({ node }: DetailProps<StreamContent>) {
   );
 }
 
+/**
+ * If we recognize type of the stream, we can provide more context
+ * like showing a font file or image
+ */
 function Context({ node }: DetailProps<StreamContent>) {
+  
   const path = node.path;
   if (path.endsWith(".FontFile2.")) {
     return <TrueTypeContext node={node} />;
