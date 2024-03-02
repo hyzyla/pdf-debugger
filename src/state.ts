@@ -69,7 +69,6 @@ export const usePDFDebuggerStore = create<PDFDebuggerStore>()((set, get) => ({
     });
   },
   expandLevel: () => {
-    const state = get();
-    return state.screen === "pdf" && state.isExample ? 6 : 4;
+    return 6;
   },
 }));

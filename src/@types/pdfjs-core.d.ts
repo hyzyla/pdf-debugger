@@ -29,7 +29,22 @@ declare module "@hyzyla/pdfjs-core" {
     reset(): void;
   }
 
-  class Stream {}
+  class Stream extends BaseStream {}
+  class DecodeStream extends BaseStream {}
+
+  class FlateStream extends DecodeStream {
+    constructor(str: DecodeStream, maybeLength: number);
+
+    str: BaseStream;
+    dict: Record<string, unknown>;
+    codeSize: number;
+    codeBuf: number;
+
+    getBits(bits: number): number;
+    getCode(table: Array<{ [key: string]: unknown }>): number;
+    generateHuffmanTable(lengths: Array<number>): [Int32Array, number];
+    readBlock(): void;
+  }
 
   class Dict {
     getRaw(key: string): any;

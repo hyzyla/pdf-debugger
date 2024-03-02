@@ -1,8 +1,7 @@
+import { DetailProps } from "@/app/_components/tree/tree-details/_types";
 import { CodeBlock } from "@/components/code-block";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/tabs";
 import { fromStringToBase64, fromStringToHexString } from "@/lib/utils";
-
-import { DetailProps } from "@/app/_components/tree/tree-details/_types";
 
 export function StringDetails({ node }: DetailProps<string>) {
   const str = node.obj;
