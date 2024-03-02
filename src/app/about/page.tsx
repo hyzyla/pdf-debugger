@@ -2,7 +2,6 @@ import Link from "next/link";
 import { GrReturn } from "react-icons/gr";
 
 import { Header } from "@/app/about/_comonents/header";
-import { InterestButton } from "@/app/about/_comonents/intereset-button";
 
 export default function AboutPage() {
   return (
@@ -23,11 +22,7 @@ export default function AboutPage() {
         </p>
         <h3>Source code</h3>
         <p>
-          The source code is not available yet, but if you are interested in it, click the button below to show me your
-          interest:
-        </p>
-        <p className="flex flex-row">
-          <InterestButton />
+          The source code is available on{" "} <Link href="https://github.com/hyzyla/pdf-debugger">GitHub</Link>
         </p>
         <h3>Privacy</h3>
         <p>
