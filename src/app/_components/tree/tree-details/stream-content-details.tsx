@@ -1,4 +1,3 @@
-import * as core from "@hyzyla/pdfjs-core";
 import { MdFileDownload } from "react-icons/md";
 
 import { DetailProps } from "@/app/_components/tree/tree-details/_types";
@@ -52,10 +51,6 @@ export function StreamContentDetails({ node }: DetailProps<StreamContent>) {
   if (stream.constructor.name === "JpegStream") {
     // @ts-ignore
     bytes = stream.bytes;
-  }
-
-  if (stream instanceof core.FlateStream) {
-    console.log("!!! FlateStream", node);
   }
 
   return (
