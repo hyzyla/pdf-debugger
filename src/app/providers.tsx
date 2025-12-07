@@ -3,7 +3,7 @@
 import { usePathname, useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
-import { useEffect } from "react";
+import { type ReactElement, type ReactNode, useEffect } from "react";
 
 if (typeof window !== "undefined") {
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
@@ -12,7 +12,7 @@ if (typeof window !== "undefined") {
   });
 }
 
-export function PostHogPageview(): JSX.Element {
+export function PostHogPageview(): ReactElement {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -31,6 +31,6 @@ export function PostHogPageview(): JSX.Element {
   return <></>;
 }
 
-export function AppPostHogProvider(props: { children: React.ReactNode }) {
+export function AppPostHogProvider(props: { children: ReactNode }) {
   return <PostHogProvider client={posthog}>{props.children}</PostHogProvider>;
 }
